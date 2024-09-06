@@ -1,22 +1,25 @@
-import React from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { useCanvasParemeterStore } from "../../stores/use-canvas-parameter-store";
-import { OrbitControls } from "@react-three/drei";
+import { FlyControls, OrbitControls } from "@react-three/drei";
+import { Sphere } from "../../component/Sphere";
 
 export const World = () => {
-  const { cameraSettings, intensityAmbientLight, position, intensityDirectionalLight, sphereArgs } = useCanvasParemeterStore();
+  const { cameraSettings, intensityAmbientLight, position, intensityDirectionalLight } = useCanvasParemeterStore();
+  const cameraRef = useRef();
+
+   
   return(
     <>
         <Canvas camera ={cameraSettings}>
-            <OrbitControls
-              enablePan={true}
-            />
-            <ambientLight intensity={intensityAmbientLight}/>
-            <directionalLight position={position} intensity={intensityDirectionalLight}/>
-            <mesh>
-              <sphereGeometry args={sphereArgs}/>
-              <meshNormalMaterial color="hotpink"/>
-            </mesh>
+          <OrbitControls
+            movementSpeed={10}
+            rollSpeed={0.5}
+            dragToLook={true}
+          />
+          <ambientLight intensity={intensityAmbientLight}/>
+          <directionalLight position={position} intensity={intensityDirectionalLight}/>
+          <Sphere/>
         </Canvas>
     </>  
   ) 
