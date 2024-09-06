@@ -1,9 +1,11 @@
 import { useCallback, useEffect } from "react";
 import useAuthStore from "../../stores/use-auth-store";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const {  loginGoogleWithPopup, observeAuthState, registerGoogleWithPopup } = useAuthStore();
+    const navigate = useNavigate();
 
     useEffect(() => {
         observeAuthState();
@@ -18,7 +20,7 @@ const Login = () => {
                 text: 'Por favor, regístrate primero.',
             });
         } else {
-            // navegar a imagen 3d
+            navigate('/world');
         }
     }, [loginGoogleWithPopup]);
 
@@ -31,7 +33,7 @@ const Login = () => {
                 text: 'Por favor, inicia sesión.',
             });
         } else {
-            // navegar a imagen 3d
+            navigate('/world');
         }
     }, [registerGoogleWithPopup]);
 
