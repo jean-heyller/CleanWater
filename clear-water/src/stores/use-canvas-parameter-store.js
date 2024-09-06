@@ -8,5 +8,6 @@ export const useCanvasParemeterStore = create((set) => ({
     intensityAmbientLight: 1.5,
     position: [0, 10, 10],
     intensityDirectionalLight: 5,
-    sphereArgs: [2, 32, 32]
+    sphereArgs: [0.3, 32, 32],
+    initialPosition: { x: -5, y: 0, z: 0 }
 }))
