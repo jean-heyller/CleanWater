@@ -1,16 +1,17 @@
 import React from 'react';
 import GoogleButton from '../button/GoogleButton';
+import Title from '../title/title';
 
 const LoginForm = ( navigate ) => {
 
   return (
     
       <div className="w-full max-w-md p-4 bg-white/60 rounded shadow-md">
-        <h2 className="text-2xl font-bold text-center">Iniciar Sesión</h2>
+        <Title text="Iniciar Sesión" fontSize='small'/>
         <form className="space-y-4">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-              Nombre de usuario
+              Email
             </label>
             <input
               type="text"

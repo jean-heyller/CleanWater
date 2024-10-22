@@ -14,7 +14,7 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 bg-cover bg-center bg-[url('/img/background.jpg')]">
       <div className="bg-gradient-to-r from-gray-400/50 to-gray-600/50 p-8 rounded shadow-md text-center">
         <Logo />
-        <Title text="El agua es vida; no mates nuestro futuro." />
+        <Title text="El agua es vida; no mates nuestro futuro." color="white" />
         <LoginForm />
         <div className="mt-4">
           <button 
