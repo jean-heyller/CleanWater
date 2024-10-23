@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import LoginForm from "../../component/form/LoginForm";
 import Logo from "../../component/logo/Logo";
-import Title from "../../component/title/title";
+import Title from "../../component/title/Title"
 import RegisterModal from "../../component/modal/RegisterModal";
 import RegisterForm from "../../component/form/RegisterForm";
 
