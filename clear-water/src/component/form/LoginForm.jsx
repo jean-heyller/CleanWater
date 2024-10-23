@@ -1,6 +1,6 @@
 import React from 'react';
 import GoogleButton from '../button/GoogleButton';
-import Title from "../../component/title/Title"
+import Title from "../title/Title"
 
 const LoginForm = ( navigate ) => {
 
