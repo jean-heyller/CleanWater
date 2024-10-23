@@ -2,7 +2,7 @@ import React from 'react';
 import GoogleButton from '../button/GoogleButton';
 import Title from "../title/Title"
 
-const LoginForm = ( navigate ) => {
+const LoginForm = () => {
 
   return (
     
