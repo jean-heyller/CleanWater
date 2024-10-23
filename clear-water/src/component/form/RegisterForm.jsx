@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import UserDao from "../../daos/UserDao";
 import GoogleButton from "../button/GoogleButton";
 import {
-    validateName,
-    validateEmail,
-    validatePassword,
-    validateConfirmPassword,
-  } from "../../utils/RegistrationValidator";
+  validateName,
+  validateEmail,
+  validatePassword,
+  validateConfirmPassword,
+} from "../../utils/RegistrationValidator";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +18,8 @@ const RegisterForm = () => {
   });
 
   const [errors, setErrors] = useState({});
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +35,8 @@ const RegisterForm = () => {
     if (emailErrors.length > 0) newErrors.email = emailErrors.join(", ");
 
     const passwordErrors = validatePassword(formData.password);
-    if (passwordErrors.length > 0) newErrors.password = passwordErrors.join(", ");
+    if (passwordErrors.length > 0)
+      newErrors.password = passwordErrors.join(", ");
 
     const confirmPasswordErrors = validateConfirmPassword(
       formData.password,
@@ -43,14 +48,19 @@ const RegisterForm = () => {
     return newErrors;
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = await validate();
+    console.log(validationErrors);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      // Procesar el formulario
-      console.log("Formulario enviado", formData);
+      UserDao.createUser({
+        email: formData.email,
+        name: formData.name,
+        password: formData.password,
+      });
+      navigate("/world");
     }
   };
 

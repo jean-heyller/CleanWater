@@ -9,7 +9,7 @@ const validateName = async (name) => {
     if (username.length < 6) {
       errors.push("El nombre de usuario debe tener al menos 6 caracteres");
     }
-    if (/[^a-zA-Z0-9]/.test(name)) {
+    if (/[^a-zA-Z0-9\s]/.test(name)) {
       errors.push(
         "El nombre de usuario no debe contener caracteres especiales"
       );
