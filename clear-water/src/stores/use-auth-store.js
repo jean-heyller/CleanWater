@@ -12,7 +12,6 @@ const useAuthStore = create((set) => ({
     loginGoogleWithPopup: async () => {
         try {
             const result = await signInWithPopup(auth, provider);
-            console.log(result);
             const user = result.user;
 
             const userExists = await UserDao.checkUserInDB(user.email);
@@ -36,7 +35,6 @@ const useAuthStore = create((set) => ({
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
             const userExists = await UserDao.checkUserInDB(user.email);
-            console.log(userExists);
             
             if (!userExists) {
                 const newUser = {

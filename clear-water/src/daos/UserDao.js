@@ -37,6 +37,24 @@ class UserDao {
         }
     }
 
+    async checkFormLogin(form) {
+        const password = CryptoJS.SHA256(form.password).toString();
+        const q = query(this.collectionRef, 
+            where("email", "==", form.email),
+            where("password", "==", password)
+        );
+        const querySnapshot = await getDocs(q);
+
+        console.log("Checking user in Firestore", querySnapshot);
+        if (querySnapshot.empty) {
+            console.log("User does not exist or password does not match");
+            return false; // Usuario no existe
+        } else {
+            console.log("Login successful");
+            return true; // Usuario ya existe
+        }
+    }
+
     async createUser(user) {
         const q = query(this.collectionRef, where("email", "==", user.email));
         const querySnapshot = await getDocs(q);

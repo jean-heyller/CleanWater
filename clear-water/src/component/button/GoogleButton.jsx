@@ -1,12 +1,10 @@
 import { useCallback, useEffect } from "react";
 import useAuthStore from "../../stores/use-auth-store";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 
-const GoogleButton = ({ type }) => {
+const GoogleButton = ({ type, navigateTo }) => {
   const { loginGoogleWithPopup, observeAuthState, registerGoogleWithPopup } =
     useAuthStore();
-  const navigate = useNavigate();
 
   useEffect(() => {
     observeAuthState();
@@ -35,8 +33,8 @@ const GoogleButton = ({ type }) => {
         return;
       }
     }
-    navigate("/world");
-  }, [type, loginGoogleWithPopup, registerGoogleWithPopup, navigate]);
+    navigateTo("/world");
+  }, [type, loginGoogleWithPopup, registerGoogleWithPopup, navigateTo]);
 
   const buttonText = type === "login" ? "Ingresar con Google" : "Registrarse con Google";
 
