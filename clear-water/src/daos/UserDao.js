@@ -1,4 +1,5 @@
 import { collection, getDoc, addDoc, deleteDoc, setDoc, query, where,getDocs } from "firebase/firestore";
+import CryptoJS from "crypto-js";
 import db from "../../firebase.config";
 
 class UserDao {
@@ -41,6 +42,9 @@ class UserDao {
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
+            if (user.password){
+                user.password = CryptoJS.SHA256(user.password).toString();
+            }
             await addDoc(this.collectionRef, user);
             console.log("User added to Firestore");
             return false; // Usuario no existía y fue agregado
