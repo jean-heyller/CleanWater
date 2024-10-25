@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import UserDao from "../../daos/UserDao";
+import useAuthStore from "../../stores/use-auth-store";
 import GoogleButton from "../button/GoogleButton";
 import ErrorMessage from "../error/ErrorMessage";
+import Swal from "sweetalert2";
 import {
   validateName,
-  validateEmail,
   validatePassword,
   validateConfirmPassword,
 } from "../../utils/FormValidator";
-
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +17,8 @@ const RegisterForm = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const { registerWithForm } = useAuthStore();
 
   const [errors, setErrors] = useState({});
 
@@ -32,9 +33,6 @@ const RegisterForm = () => {
     const newErrors = {};
     const nameErrors = await validateName(formData.name);
     if (nameErrors.length > 0) newErrors.name = nameErrors.join(", ");
-
-    const emailErrors = await validateEmail(formData.email);
-    if (emailErrors.length > 0) newErrors.email = emailErrors.join(", ");
 
     const passwordErrors = validatePassword(formData.password);
     if (passwordErrors.length > 0)
@@ -57,12 +55,19 @@ const RegisterForm = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      UserDao.createUser({
-        email: formData.email,
-        name: formData.name,
-        password: formData.password,
-      });
-      navigate("/world");
+      const registerError = await registerWithForm(formData)
+        ? null
+        : "El correo electrónico ya está registrado";
+      if (registerError)
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: registerError,
+        });
+      else {
+        console.log("Registro Exitoso");
+        navigate("/world");
+      }
     }
   };
 
@@ -102,7 +107,6 @@ const RegisterForm = () => {
           className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
-        <ErrorMessage message={errors.email}/>
       </div>
       <div>
         <label
@@ -120,7 +124,7 @@ const RegisterForm = () => {
           className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
-        <ErrorMessage message={errors.name}/>
+        <ErrorMessage message={errors.name} />
       </div>
       <div>
         <label
@@ -138,7 +142,7 @@ const RegisterForm = () => {
           className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
-        <ErrorMessage message={errors.password}/>
+        <ErrorMessage message={errors.password} />
       </div>
       <div>
         <label
@@ -156,7 +160,7 @@ const RegisterForm = () => {
           className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
-        <ErrorMessage message={errors.confirmPassword}/>
+        <ErrorMessage message={errors.confirmPassword} />
       </div>
       <div>
         <button
@@ -166,8 +170,11 @@ const RegisterForm = () => {
           Registrarse
         </button>
         <p className="text-center text-gray-500 my-4">o bien puede</p>
-        <GoogleButton type="register" navigateTo={navigate}/>
-        
+        <GoogleButton
+          type="register"
+          navigateTo={navigate}
+          useAuthStore={useAuthStore}
+        />
       </div>
     </form>
   );

@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GoogleButton from "../button/GoogleButton";
 import Title from "../title/Title";
-import ErrorMessage from "../error/ErrorMessage";
 import Swal from "sweetalert2";
-import { validateFormLogin } from "../../utils/FormValidator";
+import useAuthStore from "../../stores/use-auth-store";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +11,7 @@ const LoginForm = () => {
     password: "",
   });
 
-  const [errors, setErrors] = useState({});
+  const { loginWithForm } = useAuthStore();
 
   const navigate = useNavigate();
 
@@ -21,26 +20,21 @@ const LoginForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const validate = async() => {
-    
-    const loginErrors = await validateFormLogin(formData);
-    const newErrors = loginErrors.length > 0 ? loginErrors.join(", ") : null;
-
-    return newErrors;
-  };
-
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = await validate();
-    console.log(validationErrors);
-    
-    if (validationErrors) {
+
+    const validationErrors = (await loginWithForm(formData))
+      ? null
+      : "Usuario o contraseña incorrectos";
+
+    if (validationErrors)
       Swal.fire({
         icon: "error",
         title: "Error",
         text: validationErrors,
+        position: "center",
       });
-    } else {
+    else {
       console.log("Login Exitoso");
       navigate("/world");
     }
@@ -90,8 +84,14 @@ const LoginForm = () => {
         >
           Iniciar Sesión
         </button>
-        <p className="text-center text-gray-600">O si creaste tu cuenta con Google</p>
-        <GoogleButton type="login" navigateTo={navigate}/>
+        <p className="text-center text-gray-600">
+          O si creaste tu cuenta con Google
+        </p>
+        <GoogleButton
+          type="login"
+          navigateTo={navigate}
+          useAuthStore={useAuthStore}
+        />
       </form>
     </div>
   );

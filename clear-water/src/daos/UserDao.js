@@ -37,10 +37,10 @@ class UserDao {
         }
     }
 
-    async checkFormLogin(form) {
-        const password = CryptoJS.SHA256(form.password).toString();
+    async checkFormLogin({ email, password }) {
+        password = CryptoJS.SHA256(password).toString();
         const q = query(this.collectionRef, 
-            where("email", "==", form.email),
+            where("email", "==", email),
             where("password", "==", password)
         );
         const querySnapshot = await getDocs(q);
@@ -48,10 +48,11 @@ class UserDao {
         console.log("Checking user in Firestore", querySnapshot);
         if (querySnapshot.empty) {
             console.log("User does not exist or password does not match");
-            return false; // Usuario no existe
+            return { success: false, data: null }; // Usuario no existe o contraseña no coincide
         } else {
-            console.log("Login successful");
-            return true; // Usuario ya existe
+            const userData = querySnapshot.docs[0].data();
+            console.log("User found in Firestore", userData);
+            return { success: true, data: userData }; // Retorna la información del usuario
         }
     }
 
@@ -65,10 +66,10 @@ class UserDao {
             }
             await addDoc(this.collectionRef, user);
             console.log("User added to Firestore");
-            return false; // Usuario no existía y fue agregado
+            return false; 
         } else {
             console.log("User already exists in Firestore");
-            return true; // Usuario ya existía
+            return true;
         }
     }
 

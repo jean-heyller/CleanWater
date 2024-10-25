@@ -6,68 +6,95 @@ import UserDao from "../daos/UserDao";
 
 const provider = new GoogleAuthProvider();
 const useAuthStore = create((set) => ({
-    user: null,
-    loading: true,
+  user: null,
+  loading: true,
 
-    loginGoogleWithPopup: async () => {
-        try {
-            const result = await signInWithPopup(auth, provider);
-            const user = result.user;
+  loginGoogleWithPopup: async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
 
-            const userExists = await UserDao.checkUserInDB(user.email);
+      const userExists = await UserDao.checkUserInDB(user.email);
 
-            if (!userExists) {
-                return false
-            } else {
-                return true
-            }
+      if (!userExists) {
+        return false;
+      } else {
+        return true;
+      }
+    } catch (error) {
+      console.error(error);
+      set({ loading: false });
+    }
+  },
 
-        } catch (error) {
-            console.error(error);
-            set({ loading: false });
-        }
-    },
+  clearState: () => set({ user: null }),
 
-    clearState: () => set({ user: null }),
+  registerGoogleWithPopup: async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const userExists = await UserDao.checkUserInDB(user.email);
 
-    registerGoogleWithPopup: async () => {
-        try {
-            const result = await signInWithPopup(auth, provider);
-            const user = result.user;
-            const userExists = await UserDao.checkUserInDB(user.email);
-            
-            if (!userExists) {
-                const newUser = {
-                    name: user.displayName,
-                    email: user.email,
-                    photo: user.photoURL,
-                };
-                await UserDao.createUser(newUser);
-                set({ user, loading: false });
-                return false
-            }else{
-                return true
-            }
-        } catch (error) {
-            console.error(error);
-            set({ loading: false });
-        }
-    },
+      if (!userExists) {
+        const newUser = {
+          name: user.displayName,
+          email: user.email,
+          photo: user.photoURL,
+        };
+        await UserDao.createUser(newUser);
+        set({ user, loading: false });
+        return false;
+      } else {
+        return true;
+      }
+    } catch (error) {
+      console.error(error);
+      set({ loading: false });
+    }
+  },
 
-    logout: async () => {
-        try {
-            await auth.signOut();
-            set({ user: null, loading: false });
-        } catch (error) {
-            console.error(error);
-        }
-    },
+  loginWithForm: async (form) => {
+    const { success, data } = await UserDao.checkFormLogin(form);
 
-    observeAuthState: () => {
-        auth.onAuthStateChanged((user) => {
-            set({ user, loading: false });
-        });
-    },
+    if (success) {
+      set({ user: data, loading: false });
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  registerWithForm: async (form) => {
+    const newUser = {
+      email: form.email,
+      name: form.name,
+      password: form.password,
+    };
+    const userExists = await UserDao.createUser(newUser);
+    if (userExists) {
+      return false;
+    } else {
+      set({ user: newUser, loading: false });
+      return true;
+    }
+  },
+
+  logout: async () => {
+    try {
+      await auth.signOut();
+      set({ user: null, loading: false });
+    } catch (error) {
+      set({ loading: false });
+      console.error(error);
+    }
+  },
+
+  observeAuthState: () => {
+    auth.onAuthStateChanged((user) => {
+      set({ user, loading: false });
+    });
+  },
 }));
+
 
 export default useAuthStore;

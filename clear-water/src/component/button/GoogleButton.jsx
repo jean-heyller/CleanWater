@@ -1,8 +1,7 @@
 import { useCallback, useEffect } from "react";
-import useAuthStore from "../../stores/use-auth-store";
 import Swal from "sweetalert2";
 
-const GoogleButton = ({ type, navigateTo }) => {
+const GoogleButton = ({ type, navigateTo, useAuthStore }) => {
   const { loginGoogleWithPopup, observeAuthState, registerGoogleWithPopup } =
     useAuthStore();
 
@@ -19,6 +18,7 @@ const GoogleButton = ({ type, navigateTo }) => {
           icon: "error",
           title: "Usuario no encontrado",
           text: "Por favor, regístrate primero.",
+          position: "center",
         });
         return;
       }
@@ -29,6 +29,7 @@ const GoogleButton = ({ type, navigateTo }) => {
           icon: "error",
           title: "Usuario ya registrado",
           text: "Por favor, inicia sesión.",
+          position: "center",
         });
         return;
       }
@@ -40,6 +41,7 @@ const GoogleButton = ({ type, navigateTo }) => {
 
   return (
     <button
+      type="button"
       onClick={handleAuth}
       className="w-full bg-white text-gray-700 font-semibold py-2 px-4 border border-gray-300 rounded shadow hover:bg-gray-100 flex items-center justify-center"
     >
