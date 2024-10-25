@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import UserDao from "../../daos/UserDao";
+import useAuthStore from "../../stores/use-auth-store";
 import GoogleButton from "../button/GoogleButton";
+import ErrorMessage from "../error/ErrorMessage";
+import Swal from "sweetalert2";
 import {
   validateName,
-  validateEmail,
   validatePassword,
   validateConfirmPassword,
-} from "../../utils/RegistrationValidator";
+} from "../../utils/FormValidator";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +17,8 @@ const RegisterForm = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const { registerWithForm } = useAuthStore();
 
   const [errors, setErrors] = useState({});
 
@@ -28,11 +31,8 @@ const RegisterForm = () => {
 
   const validate = async () => {
     const newErrors = {};
-    const usernameErrors = await validateName(formData.name);
-    if (usernameErrors.length > 0) newErrors.name = usernameErrors.join(", ");
-
-    const emailErrors = await validateEmail(formData.email);
-    if (emailErrors.length > 0) newErrors.email = emailErrors.join(", ");
+    const nameErrors = await validateName(formData.name);
+    if (nameErrors.length > 0) newErrors.name = nameErrors.join(", ");
 
     const passwordErrors = validatePassword(formData.password);
     if (passwordErrors.length > 0)
@@ -55,12 +55,19 @@ const RegisterForm = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      UserDao.createUser({
-        email: formData.email,
-        name: formData.name,
-        password: formData.password,
-      });
-      navigate("/world");
+      const registerError = await registerWithForm(formData)
+        ? null
+        : "El correo electrónico ya está registrado";
+      if (registerError)
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: registerError,
+        });
+      else {
+        console.log("Registro Exitoso");
+        navigate("/world");
+      }
     }
   };
 
@@ -100,7 +107,6 @@ const RegisterForm = () => {
           className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
       </div>
       <div>
         <label
@@ -118,9 +124,7 @@ const RegisterForm = () => {
           className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
-        {errors.username && (
-          <p className="text-red-500 text-sm">{errors.username}</p>
-        )}
+        <ErrorMessage message={errors.name} />
       </div>
       <div>
         <label
@@ -138,9 +142,7 @@ const RegisterForm = () => {
           className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
-        {errors.password && (
-          <p className="text-red-500 text-sm">{errors.password}</p>
-        )}
+        <ErrorMessage message={errors.password} />
       </div>
       <div>
         <label
@@ -158,9 +160,7 @@ const RegisterForm = () => {
           className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
-        {errors.confirmPassword && (
-          <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
-        )}
+        <ErrorMessage message={errors.confirmPassword} />
       </div>
       <div>
         <button
@@ -169,9 +169,12 @@ const RegisterForm = () => {
         >
           Registrarse
         </button>
-        <div className="mt-4">
-          <GoogleButton type="register" />
-        </div>
+        <p className="text-center text-gray-500 my-4">o bien puede</p>
+        <GoogleButton
+          type="register"
+          navigateTo={navigate}
+          useAuthStore={useAuthStore}
+        />
       </div>
     </form>
   );
