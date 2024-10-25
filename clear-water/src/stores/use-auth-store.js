@@ -64,17 +64,17 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  registerWithForm: async (form) => {
+  registerWithForm: async ({ email, name, password }) => {
     const newUser = {
-      email: form.email,
-      name: form.name,
-      password: form.password,
+      email: email,
+      name: name,
+      password: password,
     };
     const userExists = await UserDao.createUser(newUser);
     if (userExists) {
       return false;
     } else {
-      set({ user: newUser, loading: false });
+      set({ user: {email: email, name: name}, loading: false });
       return true;
     }
   },
