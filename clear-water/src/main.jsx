@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { World } from './pages/world/world.jsx'
+import { World } from './pages/world/World.jsx'
 
 
 createRoot(document.getElementById('root')).render(
