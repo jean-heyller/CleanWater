@@ -36,7 +36,7 @@ const LoginForm = () => {
       });
     else {
       console.log("Login Exitoso");
-      navigate("/world");
+      navigate("/home");
     }
   };
 

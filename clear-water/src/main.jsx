@@ -4,6 +4,7 @@ import App from './App.jsx'
 import './index.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { World } from './pages/world/World.jsx'
+import  Home  from './pages/home/Home.jsx'
 
 
 createRoot(document.getElementById('root')).render(
@@ -12,6 +13,7 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/world" element={<World />} />
+        <Route path="/home" element={< Home />} />
       </Routes>
     </Router>
   </StrictMode>,

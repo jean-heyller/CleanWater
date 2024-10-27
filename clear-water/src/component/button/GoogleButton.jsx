@@ -34,7 +34,7 @@ const GoogleButton = ({ type, navigateTo, useAuthStore }) => {
         return;
       }
     }
-    navigateTo("/world");
+    navigateTo("/home");
   }, [type, loginGoogleWithPopup, registerGoogleWithPopup, navigateTo]);
 
   const buttonText = type === "login" ? "Ingresar con Google" : "Registrarse con Google";
