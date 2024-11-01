@@ -4,10 +4,17 @@ import { Canvas } from "@react-three/fiber";
 import { Text3D, OrbitControls, Box } from "@react-three/drei";
 import Button3D from "../../component/button-madera/Button3D";
 import Fish3D from "../../component/fish/Fish3D";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+
+    const navigate = useNavigate();
     const handleButtonClick = (buttonText) => {
         alert(`Button ${buttonText} clicked!`);
+    };
+
+    const handleStartClick = () => {
+        navigate('/ocean');
     };
 
     return (
@@ -24,7 +31,7 @@ const Home = () => {
                     Clean Water Welcome
                     <meshStandardMaterial attach="material" color="#87CEEB"/>
                 </Text3D>
-                <Button3D position={[-0.9, 1, 0]} onClick={() => handleButtonClick('1')} text="Start" />
+                <Button3D position={[-0.9, 1, 0]} onClick={handleStartClick} text="Start" />
                 <Button3D position={[0.5, -1, 0]} onClick={() => handleButtonClick('2')} text="Scores" />
                 <Button3D position={[-0.9, -3, 0]} onClick={() => handleButtonClick('3')} text="Exit" />
                 <Box position={[0, -1, -0.1]} args={[0.1, 6, 0.1]}>
