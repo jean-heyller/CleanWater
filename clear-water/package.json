@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^9.111.5",
     "@react-three/fiber": "^8.17.6",
     "@types/three": "^0.168.0",
@@ -22,7 +23,6 @@
     "three": "^0.168.0",
     "zustand": "^4.5.5"
   },
-  
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@types/react": "^18.3.3",
