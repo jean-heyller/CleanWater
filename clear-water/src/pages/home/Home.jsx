@@ -6,7 +6,7 @@ import Fish3D from "../../component/fish/Fish3D";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-    const [audio] = useState(new Audio('/public/audio/sound_home.m4a')); 
+    const [audio] = useState(new Audio('/public/audio/sound_home.mp3')); 
     const navigate = useNavigate();
     
     const handleButtonClick = (buttonText) => {
