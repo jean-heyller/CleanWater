@@ -3,11 +3,12 @@ import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, useGLTF } from "@react-three/drei";
 import Ocean3d from "../../component/ocean/Ocean3d";
+import { useNavigate } from "react-router-dom";
 
 export const OceanGarbage = () => {
   return (
     <div className="bg-[url('/img/ocean.webp')] bg-cover bg-center h-screen flex">
-      <div className="w-1/2 p-8 text-white overflow-y-auto">
+      <div className="w-1/2 p-8 text-black overflow-y-auto bg-white bg-opacity-50">
         <h1 className="text-4xl mb-4">LA CONTAMINACIÓN DEL AGUA</h1>
         <p className="text-lg mb-4">
           La contaminación del agua es uno de los problemas ambientales más
