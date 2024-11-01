@@ -1,10 +1,44 @@
-import { Canvas, useLoader } from '@react-three/fiber';
-import { useRef } from 'react';
+import { Canvas, useLoader, useFrame } from '@react-three/fiber';
+import { useRef, useState } from 'react';
 import React from 'react';
 import { TextureLoader, RepeatWrapping } from 'three';
 import { OrbitControls, Text } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
+import { useEffect } from 'react';
+
+const Bubble = () => {
+  const bubbleRef = useRef();
+  const [positionY, setPositionY] = useState(-1);
+
+  useEffect(() => {
+    bubbleRef.current.position.y = positionY;
+    bubbleRef.current.position.x = Math.random() * 30 - 15;
+    bubbleRef.current.position.z = Math.random() * 30 - 15;
+  }, []);
+
+  useFrame(() => {
+    if (bubbleRef.current) {
+      const newY = positionY + 0.01;
+      setPositionY(newY);
+      bubbleRef.current.position.y = newY;
+
+      if (newY > 15) {
+        setPositionY(-1);
+        bubbleRef.current.position.x = Math.random() * 30 - 15;
+        bubbleRef.current.position.z = Math.random() * 30 - 15;
+      }
+    }
+  });
+
+  return (
+    <mesh ref={bubbleRef}>
+      <sphereGeometry args={[0.5, 16, 16]} /> 
+      <meshStandardMaterial color="lightblue" transparent opacity={0.8} />
+    </mesh>
+  );
+};
+
 
 const Floor = () => {
   const texture = useLoader(TextureLoader, '/texture/playa.jpg');
@@ -82,20 +116,15 @@ y afecta a la biodiversidad marina. La acidificación es
 una consecuencia directa del cambio climático y requiere 
 una acción urgente para mitigar su impacto en los océanos.`;
 
-  // Puedes ajustar estas posiciones según sea necesario
-  const positionX = -5; // Posición en el eje X
-  const positionY = 10;  // Posición en el eje Y
-  const positionZ = -50; // Posición en el eje Z
-
+  const positionX = -5;  
+  const positionZ = -50; 
   return (
     <>
-      {/* Cuadrado grande detrás del texto */}
       <mesh position={[positionX, 17, positionZ]}>
         <planeGeometry args={[60, 29]} />
         <meshBasicMaterial color="black" />
       </mesh>
       
-      {/* Texto en 3D */}
       <Text
         position={[positionX, 17, -45]}
         fontSize={1.5}
@@ -109,9 +138,6 @@ una acción urgente para mitigar su impacto en los océanos.`;
     </>
   );
 };
-
-
-
 
 const Scene = () => {
   return (
@@ -136,6 +162,9 @@ const Scene = () => {
       <FishModel />
       <PlantasModel />
       <OceanAcidificationText />
+      {Array.from({ length: 20 }).map((_, index) => (
+        <Bubble key={index} />
+      ))}
       <CameraController />
     </Canvas>
   );
