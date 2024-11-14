@@ -26,7 +26,7 @@ const Controls = () => {
 
     const step = 0.02;
 
-    // Interpolate camera position towards sign's position
+    // Interpolate camera position towards problems's position
     const newPosX = MathUtils.lerp(
       camera.position.x,
       problem.positionCamera.x,
