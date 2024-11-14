@@ -1,8 +1,9 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Text3D, OrbitControls, Environment, KeyboardControls } from "@react-three/drei";
+import React, { useState, useMemo, useEffect, useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Text3D, OrbitControls, Environment, KeyboardControls, Text } from "@react-three/drei";
 import Ocean3d from "../../component/ocean/Ocean3d";
 import { useNavigate } from "react-router-dom";
+import { Vector3 } from "three";
 
 const Controls = {
     forward: 'forward',
@@ -19,6 +20,19 @@ const colors = [
     "#FF33A1", "#A133FF", "#33FFF5", "#FF8C33", "#8CFF33"
 ];
 
+const CameraController = ({ cameraPosition, controlCamera }) => {
+    const cameraRef = useRef();
+
+    useFrame(({ camera }) => {
+        if (controlCamera) {
+            camera.position.lerp(cameraPosition, 0.05); // Smooth transition
+            camera.lookAt(0, 0, 0); // Ensure the camera is looking at the center
+        }
+    });
+
+    return null;
+};
+
 export const OceanGarbage = () => {
     const [envRotation, setEnvRotation] = useState([0, 0, 0]);
     const [rotation, setRotation] = useState([0, Math.PI, 0]);
@@ -28,6 +42,8 @@ export const OceanGarbage = () => {
     const [downPressed, setDownPressed] = useState(false);
     const [colorIndex, setColorIndex] = useState(0);
     const [isPointerOver, setIsPointerOver] = useState(false);
+    const [cameraPosition, setCameraPosition] = useState(new Vector3(150, 150, -550));
+    const [controlCamera, setControlCamera] = useState(true);
 
     const rotateLeft = () => {
         const newRotation = [rotation[0], rotation[1] - Math.PI / 8, rotation[2]];
@@ -71,6 +87,9 @@ export const OceanGarbage = () => {
             setUpPressed(pressed);
         } else if (name === Controls.back) {
             setDownPressed(pressed);
+        } else if (name === Controls.jump) {
+            setCameraPosition(new Vector3(150, 150, -550)); // Change to the desired position
+            setControlCamera(true); //
         }
     };
 
@@ -109,6 +128,11 @@ export const OceanGarbage = () => {
 
     const handleButtonClick = () => {
         navigate("/recycling");
+    };
+
+    const handle3DButtonClick = () => {
+        setCameraPosition(new Vector3(50, 50, -110)); // Change to the desired position
+        setControlCamera(true); // Enable camera control
     };
 
     return (
@@ -211,7 +235,28 @@ export const OceanGarbage = () => {
                             onPointerOver={() => setIsPointerOver(true)}
                             onPointerOut={() => setIsPointerOver(false)}
                         />
-                        <OrbitControls />
+                        <mesh
+                            position={[0, -165, -90]}
+                            scale={[15, 5, 5]}
+                            onClick={handle3DButtonClick}
+                            onPointerOver={() => document.body.style.cursor = 'pointer'}
+                            onPointerOut={() => document.body.style.cursor = 'auto'}
+                        >
+                            <boxGeometry args={[1, 1, 1]} />
+                            <meshStandardMaterial color="orange" transparent={true} opacity={0} />
+                            <Text
+                                position={[0, 0, 0.6]} // Adjust position to place text in front of the box
+                                fontSize={2} // Adjust font size as needed
+                                color={colors[colorIndex]} // Text color
+                                anchorX="center" // Anchor text horizontally
+                                anchorY="middle"
+                                rotation={[0, Math.PI, 0]}// Anchor text vertically
+                            > 
+                               {"    Contamina \n nuestro Océano \n             ▶"}
+                            </Text>
+                        </mesh>
+                        <CameraController cameraPosition={cameraPosition} controlCamera={controlCamera} />
+                        <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} onStart={() => setControlCamera(false)} />
                         <Environment background={true} files={"/cubemap/ocean/kloppenheim_06_puresky_2k.hdr"} rotation={envRotation} />
                     </Canvas>
                 </div>
