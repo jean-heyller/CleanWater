@@ -4,9 +4,10 @@ import { Text3D, OrbitControls, Box } from "@react-three/drei";
 import Button3D from "../../component/button-madera/Button3D";
 import Fish3D from "../../component/fish/Fish3D";
 import { useNavigate } from "react-router-dom";
+import sound from "/audio/sound_home.mp3";
 
 const Home = () => {
-    const [audio] = useState(new Audio('/public/audio/sound_home.m4a')); 
+   const audio = new Audio(sound);
     const navigate = useNavigate();
     
     const handleButtonClick = (buttonText) => {

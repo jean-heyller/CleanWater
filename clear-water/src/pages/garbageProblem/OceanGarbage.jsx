@@ -13,7 +13,7 @@ export const OceanGarbage = () => {
         navigate('/recycling');
     };
     return (
-        <div className="bg-[url('/img/ocean.webp')] bg-cover bg-center h-screen flex">
+        <div className="bg-[url('/img/basura.webp')] bg-cover bg-center h-screen flex">
             <div className="w-1/2 p-8 text-white overflow-y-auto">
                 <h1 className="text-4xl font-bold mb-4">LA CONTAMINACIÓN DEL AGUA</h1>
                 <p className="text-lg font-semibold mb-4">
@@ -29,15 +29,15 @@ export const OceanGarbage = () => {
                     Aquí te comparto algunos enlaces donde puedes leer más en detalle sobre las causas y consecuencias de la contaminación de mares y ríos, además de conocer las iniciativas actuales para combatir este problema:
                 </p>
                 <ul className="list-disc list-inside text-lg font-semibold mb-4">
-                    <li><a href="https://www.iberdrola.com/sostenibilidad/contaminacion-del-agua" className="text-blue-400 underline" target="_blank">Contaminación de los océanos: causas y soluciones</a></li>
-                    <li><a href="https://www.nrdc.org/es/stories/contaminacion-agua-todo-lo-necesitas-saber" className="text-blue-400 underline" target="_blank">La contaminación en los ríos: impacto y soluciones</a></li>
-                    <li><a href="https://www.nationalgeographic.es/medio-ambiente/contaminacion-del-agua" className="text-blue-400 underline" target="_blank">Impacto de los plásticos en los océanos y el medioambiente marino</a></li>
-                    <li><a href="https://es.wikipedia.org/wiki/Contaminaci%C3%B3n_h%C3%ADdrica" className="text-blue-400 underline" target="_blank">Efectos de la contaminación del agua en la salud humana</a></li>
+                    <li><a href="https://www.iberdrola.com/sostenibilidad/contaminacion-del-agua" className="text-white-400 underline" target="_blank">Contaminación de los océanos: causas y soluciones</a></li>
+                    <li><a href="https://www.nrdc.org/es/stories/contaminacion-agua-todo-lo-necesitas-saber" className="text-white-400 underline" target="_blank">La contaminación en los ríos: impacto y soluciones</a></li>
+                    <li><a href="https://www.nationalgeographic.es/medio-ambiente/contaminacion-del-agua" className="text-white-400 underline" target="_blank">Impacto de los plásticos en los océanos y el medioambiente marino</a></li>
+                    <li><a href="https://es.wikipedia.org/wiki/Contaminaci%C3%B3n_h%C3%ADdrica" className="text-white-400 underline" target="_blank">Efectos de la contaminación del agua en la salud humana</a></li>
                 </ul>
                 <p className="text-lg font-semibold">
                     Estos enlaces proporcionan información detallada sobre el tema y cubren perspectivas desde el impacto ambiental hasta las repercusiones sociales y de salud, que ayudan a entender la magnitud del problema y las acciones que se están tomando para abordarlo.
                 </p>
-                <button 
+                <button
                     className="mt-4 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 font-bold"
                     onClick={handleButtonClick}
                 >
