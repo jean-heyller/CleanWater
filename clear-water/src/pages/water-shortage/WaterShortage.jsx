@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import Desert from "./models-3D/desert/Desert";
 import "./WaterShortage.css";
 import Staging from "./staging/Staging";
-import Controls from "./controls/Controls";
+import Controls from "../../component/controls/Controls";
+import { useProblemStore } from "../../stores/store-problem-selected";
 import Title3D from "./text/Title3D";
 import ProblemsButtons from "./html-3D/ProblemsButtons";
 import InformationModal from "../../component/modal/InformationModal";
@@ -12,9 +13,12 @@ import { KeyboardControls } from "@react-three/drei";
 import KeyBoardsFunctions from "./events/KeyboardFunctions";
 import MouseFunctions from "./events/MouseFunctions";
 import ProblemText from "./text/ProblemText";
+
+
 const WaterShortage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProblem, setSelectedProblem] = useState(null);
+  const { problem } = useProblemStore();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -25,7 +29,6 @@ const WaterShortage = () => {
   };
 
   const handleSelectedProblem = (problem) => {
-    console.log(problem);
     setSelectedProblem(problem);
   };
 
@@ -47,7 +50,7 @@ const WaterShortage = () => {
             handleOpenModal={handleOpenModal}
             handleSelectedProblem={handleSelectedProblem}
           />
-          <Controls />
+          <Controls element={problem} target={[-14, -1, 20]}/>
           <KeyBoardsFunctions handleSelectedProblem={handleSelectedProblem} />
         </MouseFunctions>
       </KeyboardControls>
