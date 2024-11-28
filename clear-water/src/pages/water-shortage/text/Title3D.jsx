@@ -3,17 +3,8 @@ import { useMemo, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Color } from "three";
 import { useTranslation } from "react-i18next";
+import { CuboidCollider, RigidBody } from "@react-three/rapier";
 
-
-
-/**
- * Welcome component renders a 3D text with dynamic color animation and visual effects.
- *
- * @component
- * @param {Object} props - Component props.
- * @param {Object} props.top - Whether to position the component at the top.
- * @returns {JSX.Element}
- */
 const Title3D = (props) => {
   const { t } = useTranslation("general");
 
@@ -24,12 +15,6 @@ const Title3D = (props) => {
   const saturation = "100%";
   const lightness = "50%";
 
-  /**
-   * Updates hue value over time to animate color.
-   *
-   * @param {Object} state - Current state.
-   * @param {number} delta - Time delta since last frame.
-   */
   useFrame((state, delta) => {
     const hueStep = 50 * delta;
 
@@ -46,33 +31,31 @@ const Title3D = (props) => {
     });
   });
 
-  /**
-   * Generates a Color object based on current hue, saturation, and lightness.
-   *
-   * @type {Color}
-   */
   const color = useMemo(() => {
     return new Color(`hsl(${hue}, ${saturation}, ${lightness})`);
   }, [hue]);
   return (
     <Center {...props} top>
       <Float speed={1} rotationIntensity={0.5} floatIntensity={0.5}>
-        <Text3D
-          font={"/fonts/3d/Before-the-Rainbow.json"}
-          height={0.2}
-          lineHeight={0.5}
-          letterSpacing={0.08}
-          size={3.9}
-          rotation={[0, 3.15, 0]}
-        >
-          {text}
-          <meshPhongMaterial
-            color={color}
-            emissive={0xf8270a}
-            specular={0x930c12}
-            shininess={100}
-          />
-        </Text3D>
+        <RigidBody type="dinamic" colliders={false}>
+          <Text3D
+            font={"/fonts/3d/Before-the-Rainbow.json"}
+            height={0.2}
+            lineHeight={0.5}
+            letterSpacing={0.08}
+            size={3.9}
+            rotation={[0, 3.15, 0]}
+          >
+            {text}
+            <meshPhongMaterial
+              color={color}
+              emissive={0xf8270a}
+              specular={0x930c12}
+              shininess={100}
+            />
+          </Text3D>
+          <CuboidCollider args={[19, 3, 4]} position={[-17, 1, 0]}/>
+        </RigidBody>
       </Float>
     </Center>
   );
