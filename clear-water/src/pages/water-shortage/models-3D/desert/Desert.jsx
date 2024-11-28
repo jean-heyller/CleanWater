@@ -1,15 +1,17 @@
-import React, { useRef, useCallback } from 'react'
-import { useGLTF } from '@react-three/drei'
-
+import React from "react";
+import { useGLTF } from "@react-three/drei";
 
 export function Desert(props) {
-  const { nodes, materials } = useGLTF('models/desert.gltf')
-  
+  const { nodes, materials } = useGLTF("models/desert.gltf");
+
   return (
     <group {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]} scale={0.065}>
         <group rotation={[Math.PI / 2, 0, 0]}>
-          <group position={[-86.455, 21.517, -4.399]} rotation={[Math.PI, -1.379, Math.PI]}>
+          <group
+            position={[-86.455, 21.517, -4.399]}
+            rotation={[Math.PI, -1.379, Math.PI]}
+          >
             <mesh
               castShadow
               receiveShadow
@@ -21,7 +23,8 @@ export function Desert(props) {
           <group
             position={[-75.167, 13.773, -7.437]}
             rotation={[-Math.PI / 2, 0, 0]}
-            scale={[22.166, 22.769, 22.166]}>
+            scale={[22.166, 22.769, 22.166]}
+          >
             <mesh
               name="River"
               castShadow
@@ -84,9 +87,9 @@ export function Desert(props) {
         scale={0.913}
       />
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/desert.glb')
+useGLTF.preload("/desert.glb");
 
 export default Desert;
