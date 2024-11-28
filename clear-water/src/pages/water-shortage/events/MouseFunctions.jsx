@@ -26,7 +26,7 @@ const MouseFunctions = ({ children, handleSelectedProblem }) => {
   return (
     <Canvas
       shadows
-      camera={{ position: [0, 2, 4], fov: 35 }}
+      camera={{ position: [0, 2, 4], fov: 38 }}
       onWheel={handleWheel}
     >
       {children}
