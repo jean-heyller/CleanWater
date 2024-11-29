@@ -5,6 +5,10 @@ import { TextureLoader, RepeatWrapping } from 'three';
 import { OrbitControls, Text } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
+import { Html } from '@react-three/drei';
+import { AnimationMixer } from 'three';
+import { Clone } from '@react-three/drei';
+import { Physics, useBox, usePlane } from '@react-three/cannon';
 
 const Bubble = ({ moveUp }) => {
   const bubbleRef = useRef();
@@ -45,8 +49,14 @@ const Floor = () => {
   texture.wrapS = texture.wrapT = RepeatWrapping;
   texture.repeat.set(10, 10);
 
+  const [ref] = usePlane(() => ({
+    rotation: [-Math.PI / 2, 0, 0],
+    position: [0, -0.1, 0],
+    type: 'Static',
+  }));
+
   return (
-    <mesh rotation-x={-Math.PI / 2} position-y={-0.1} receiveShadow>
+    <mesh ref={ref} receiveShadow>
       <planeGeometry args={[500, 500]} />
       <meshLambertMaterial map={texture} />
     </mesh>
@@ -93,14 +103,91 @@ const CameraController = () => {
   );
 };
 
-const FishModel = () => {
-  const { scene } = useLoader(GLTFLoader, '/models-3d/neon.glb');
-  return <primitive object={scene} position={[0, 0, 0]} scale={[3, 3, 3]} castShadow />;
+
+
+const RockModel = () => {
+  const { scene } = useLoader(GLTFLoader, '/models-3d/rock.glb');
+  const [ref] = useBox(() => ({
+    mass: 1,
+    position: [-30, 50, 0],
+    type: 'Dynamic',
+  }));
+
+  return (
+    <primitive
+      object={scene}
+      ref={ref}
+      scale={[0.09, 0.09, 0.09]}
+      castShadow
+    />
+  );
 };
 
+const FishModels = () => {
+  const { scene, animations } = useLoader(GLTFLoader, '/models-3d/koi_fish.glb');
+  const mixer = useRef();
+
+  useEffect(() => {
+    if (animations && animations.length) {
+      mixer.current = new AnimationMixer(scene);
+      const action = mixer.current.clipAction(animations[0]);
+      action.play();
+    }
+  }, [animations, scene]);
+
+  useFrame((state, delta) => {
+    if (mixer.current) {
+      mixer.current.update(delta);
+    }
+  });
+
+  return (
+    <primitive
+      object={scene}
+      position={[0, 5, 0]}
+      scale={[3, 3, 3]}
+      castShadow
+      receiveShadow
+    />
+  );
+};
+
+
 const PlantasModel = () => {
-  const { scene } = useLoader(GLTFLoader, '/models-3d/plantas.glb');
-  return <primitive object={scene} position={[0, 0, 0]} scale={[8, 8, 8]} castShadow />;
+  const { scene, animations } = useLoader(GLTFLoader, '/models-3d/plantas.glb');
+  const plantRef = useRef();
+
+  if (!scene) return <div>Loading...</div>;
+
+  return (
+    <>
+      <primitive
+        object={scene}
+        ref={plantRef}
+        position={[0, 0, 0]}
+        scale={[8, 8, 8]}
+        castShadow
+      />
+      
+      {plantRef.current && (
+        <>
+          <Clone
+            object={plantRef.current}
+            position={[20, 0, 0]}
+          />
+          <Clone
+            object={plantRef.current}
+            position={[-20, 0, 0]}
+          />
+          <Clone
+            object={plantRef.current}
+            position={[20, 0, -10]}
+          />
+         
+        </>
+      )}
+    </>
+  );
 };
 
 const OceanAcidificationText = () => {
@@ -139,6 +226,35 @@ una acción urgente para mitigar su impacto en los océanos.`;
   );
 };
 
+const OceanAcidificationSolutionText = () => {
+  const text = `La solución para mitigar la acidificación del océano 
+requiere esfuerzos globales y locales. Algunas acciones clave incluyen:
+->> Reducción de las emisiones de CO2 a través de energías limpias y sostenibles.
+->> Protección de los ecosistemas marinos, como los arrecifes de coral y los manglares, que ayudan a absorber CO2.
+->> Restauración de ecosistemas marinos para fortalecer la resiliencia de las especies.
+->> Promoción de políticas globales de conservación marina y acciones contra el cambio climático.`;
+
+  return (
+    <Html position={[200, 15, -200]}>
+      <div
+        style={{
+          color: 'white',
+          fontSize: '20px',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          padding: '15px',
+          borderRadius: '8px',
+          width: '300px',
+          lineHeight: '1.5',
+          whiteSpace: 'pre-line',
+        }}
+      >
+        <h3 style={{ color: 'red' }}>Soluciones para la Acidificación de los Océanos</h3>
+        <p>{text}</p>
+      </div>
+    </Html>
+  );
+};
+
 const InstructionText = () => {
   const text = "Presiona 'P' o haz clic para hacer subir las burbujas";
 
@@ -156,11 +272,10 @@ const InstructionText = () => {
   );
 };
 
-// Componente para el título 3D "Clear Water"
 const Title = () => {
   return (
     <Text
-      position={[-40, 15, -25]} // Ajusta la posición para que se vea bien
+      position={[-40, 15, -25]}
       fontSize={5}
       color="Black"
       anchorX="center"
@@ -168,17 +283,15 @@ const Title = () => {
       maxWidth={15}
       lineHeight={1.2}
       letterSpacing={0.1}
-      rotation={[0, Math.PI / 4, 0]} // Rotación opcional para un toque 3D interesante
+      rotation={[0, Math.PI / 4, 0]}
     >
       CLEAR WATER
     </Text>
   );
 };
 
-// Agregar el botón de redirección
 const RedirectButton = () => {
   const handleButtonClick = () => {
-    // Redirige al usuario al video de YouTube
     window.open('https://www.youtube.com/watch?v=HOIB_Yda8Xo', '_blank');
   };
 
@@ -207,7 +320,6 @@ const RedirectButton = () => {
 const Scene = () => {
   const [moveBubbles, setMoveBubbles] = useState(false);
 
-  // Manejar eventos de teclado
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'p' || event.key === 'P') {
@@ -215,16 +327,13 @@ const Scene = () => {
       }
     };
 
-    // Listener de la tecla "P"
     window.addEventListener('keydown', handleKeyDown);
 
-    // Limpiar el listener cuando se desmonte el componente
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
-  // Manejar el evento de clic
   const handleClick = () => {
     setMoveBubbles(true);
   };
@@ -232,29 +341,33 @@ const Scene = () => {
   return (
     <>
       <Canvas style={{ height: '100vh', width: '100vw' }} camera={{ position: [0, 10, 25], fov: 75 }} shadows onClick={handleClick}>
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.50} />
         <pointLight 
           position={[10, 10, 10]} 
-          intensity={1} 
+          intensity={0.8} 
           castShadow 
           shadow-mapSize-width={1024} 
           shadow-mapSize-height={1024} 
         />
         <directionalLight 
           position={[-5, 10, 5]} 
-          intensity={1} 
+          intensity={3} 
           castShadow 
           shadow-mapSize-width={1024} 
           shadow-mapSize-height={1024} 
         />
         <Background />
+        <Physics>
         <Floor />
-        <FishModel />
+        <RockModel />
+        </Physics>
         <PlantasModel />
+        <FishModels />
         <OceanAcidificationText />
         <InstructionText />
         <Title /> 
-        {Array.from({ length: 20 }).map((_, index) => (
+        <OceanAcidificationSolutionText />
+        {Array.from({ length: 50 }).map((_, index) => (
           <Bubble key={index} moveUp={moveBubbles} />
         ))}
         <CameraController />
