@@ -1,128 +1,110 @@
-import React, { useState, useEffect } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Text3D, OrbitControls, Box } from "@react-three/drei";
-import Button3D from "../../component/button-madera/Button3D";
-import Fish3D from "../../component/fish/Fish3D";
-import World3D from "../../component/word/World";
-import { useNavigate } from "react-router-dom";
-import sound from "/audio/sound_home.mp3";
+/* eslint-disable react/no-unknown-property */
+import { Canvas, useLoader } from "@react-three/fiber";
+import { TextureLoader } from "three";
+import { Text3D } from "@react-three/drei";
+import Controls from "../../component/controls/Controls";
 
-const RotatingWorld3D = ({ showWorld }) => {
-  const [rotation, setRotation] = useState([0, 0, 0]);
+import { useTypeStore } from "../../stores/store-type-selected";
+import FunctionButtons from "./function-buttons/FunctionButtons";
+import { useState } from "react";
 
-  useFrame(() => {
-    if (showWorld) {
-      setRotation((prevRotation) => [
-        prevRotation[0],
-        prevRotation[1] + 0.01,
-        prevRotation[2],
-      ]);
-    }
-  });
+import Desert from "../water-shortage/models-3D/desert/Desert";
 
-  return <World3D position={[-3, 0, 0]} scale={[0.01, 0.01, 0.01]} rotation={rotation} />;
+import * as THREE from 'three';
+
+const TexturedSphere = ({ position, onClick }) => {
+  const texture = useLoader(TextureLoader, '/img/textura.jpg');
+  return (
+    <mesh position={position} onClick={onClick}>
+      <sphereGeometry args={[1, 32, 32]} />
+      <meshStandardMaterial map={texture} />
+    </mesh>
+  );
 };
 
 const Home = () => {
-  const audio = new Audio(sound);
-  const navigate = useNavigate();
-  const [showWorld, setShowWorld] = useState(false);
-  const [cameraPosition, setCameraPosition] = useState([0, 0, 10]);
+  const { typeProblem } = useTypeStore();
+  const [introState, setIntroState] = useState(false);
+  const [hoveredObject, setHoveredObject] = useState(null);
 
-  const handleButtonClick = (buttonText) => {
-    alert(`Button ${buttonText} clicked!`);
+  const Background = ({ onClick }) => {
+    const texture = useLoader(TextureLoader, '/texture/fondo_marino.jpg');
+
+    return (
+      <mesh position={[120, -55, -50]} scale={[0.25, 0.25, 0.10]} onClick={onClick}>
+        <boxGeometry args={[100, 100, 100]} />
+        <meshBasicMaterial map={texture} side={THREE.DoubleSide} />
+      </mesh>
+    );
   };
 
-  const handleStartClick = () => {
-    navigate("/ocean");
+  const handleClick = (object) => {
+    setHoveredObject(object);
   };
-
-  const handleSoundClick = () => {
-    audio.play();
-  };
-
-  const handleScroll = () => {
-    console.log("Scroll Y Position:", window.scrollY);
-    if (window.scrollY > 0) { // Adjust the scroll value as needed
-      setShowWorld(true);
-      setCameraPosition([0, -5, 10]); // Move the camera down
-    }
-  };
-
-  useEffect(() => {
-    const siteContent = document.getElementsByClassName("site-content")[0];
-    if (siteContent) {
-      siteContent.addEventListener("scroll", handleScroll);
-    }
-    return () => {
-      if (siteContent) {
-        siteContent.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log("Camera Position:", cameraPosition);
-  }, [cameraPosition]);
 
   return (
     <div className="bg-[url('/img/ocean.webp')] bg-cover bg-center h-screen">
-      <Canvas camera={{ position: cameraPosition, fov: 50 }}>
-        <ambientLight intensity={1} />
-        <directionalLight position={[0, 5, 3]} intensity={1.5} />
-        <pointLight position={[-10, -10, -10]} intensity={1} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
-        
+      <Canvas camera={{ position: [0, 2, 4], fov: 110 }}>
+        <ambientLight intensity={0.8} />
+        <directionalLight position={[0, 5, 3]} intensity={1} />
         <Text3D
-          position={[-6.5, 3, 1]}
+          position={[-5.5, 3, 1]}
           font="/fonts/3d/blue-ocean.json"
-          size={1}
+          size={0.75}
           height={0.2}
+          anchorX="center" // Centra el texto en el eje X
+          anchorY="middle"
         >
-          Clean Water Welcome
+          {introState ? "Select a problem" : "Welcome to CleanWater"}
           <meshStandardMaterial attach="material" color="#87CEEB" />
         </Text3D>
-        <Button3D
-          position={[-0.9, 1, 0]}
-          onClick={handleStartClick}
-          text="Start"
-        />
-        <Button3D
-          position={[0.5, -1, 0]}
-          onClick={() => handleButtonClick("2")}
-          text="Scores"
-        />
-        <Button3D
-          position={[-0.9, -3, 0]}
-          onClick={() => handleButtonClick("3")}
-          text="Exit"
-        />
-        <Button3D
-          position={[-7, 1.5, 0]}
-          onClick={handleSoundClick}
-          text="click me"
-        />
-
-        <Box position={[0, -1, -0.1]} args={[0.1, 6, 0.1]}>
-          <meshStandardMaterial attach="material" color="saddlebrown" />
-        </Box>
-        <Fish3D position={[-3, 0, 0]} />
-        {showWorld && (
+        <FunctionButtons state={introState} setState={setIntroState} />
+        {introState && (
           <>
-            <RotatingWorld3D showWorld={showWorld} />
-            <Text3D
-              position={[3, 0, 0]}
-              font="/fonts/3d/blue-ocean.json"
-              size={0.5}
-              height={0.1}
-            >
-              2.5% of the world's water is potable
-              <meshStandardMaterial attach="material" color="#87CEEB" />
-            </Text3D>
+            <Desert
+              position={[11.5, 2, 0]}
+              rotation={[Math.PI / 55, 0, 0]}
+              scale={0.6}
+              onClick={() => handleClick('Desert')}
+            />
+            <Background
+              onClick={() => handleClick('Background')}
+            />
+            <TexturedSphere
+              position={[8, -0.00000, 0]}
+              scale={[0.01, 0.01, 0.01]}
+              onClick={() => handleClick('TexturedSphere')}
+            />
           </>
         )}
-
-        <OrbitControls />
+        {hoveredObject && (
+          <Text3D
+            position={[-6, 2, 0]}
+            font="/fonts/3d/blue-ocean.json"
+            size={0.35}
+            height={0.0}
+            anchorX="left"
+            anchorY="middle"
+          >
+            {hoveredObject === 'Desert' && (
+              "La escasez de agua ocurre cuando la demanda \nsupera la disponibilidad o la calidad del agua dulce \n. Sus causas incluyen el cambio climático, la contaminación \n, el uso excesivo y el crecimiento poblacional. \n" +
+              "Esto afecta el acceso a agua potable, la producción de alimentos,\n la biodiversidad y genera problemas de salud y conflictos \n por recursos. " +
+              "Para enfrentarla, se necesitan medidas \n como el uso eficiente, la protección de fuentes\n hídricas y políticas sostenibles."
+            )}
+            {hoveredObject === 'TexturedSphere' && (
+              "La contaminación del agua ocurre cuando sustancias dañinas,\n como desechos industriales, agrícolas y domésticos, alteran su calidad. \nEsto afecta ríos, lagos, océanos y acuíferos.\n " +
+              "Las consecuencias incluyen la pérdida de biodiversidad\n, la escasez de agua potable y problemas de salud pública \n, como enfermedades transmitidas por el agua.\n " +
+              "Es crucial reducir la contaminación mediante el tratamiento de desechos, \n regulaciones más estrictas y la promoción de prácticas sostenibles."
+            )}
+            {hoveredObject === 'Background' && (
+              "La acidificación del océano es el aumento de la acidez del agua \n marina debido a la absorción de dióxido de carbono (CO₂) de la atmósfera. \n Esto reduce el pH del agua y altera su equilibrio químico.\n " +
+              "Las consecuencias incluyen el debilitamiento de corales,\n moluscos y otras especies marinas que dependen del calcio, \n lo que afecta a los ecosistemas \n y a las comunidades que dependen de ellos. \n " +
+              "Para mitigarla, es esencial reducir las emisiones de CO₂ \n mediante energías limpias y prácticas sostenibles."
+            )}
+            <meshStandardMaterial attach="material" color="#000000" />
+          </Text3D>
+        )}
+        <Controls element={typeProblem} target={[0, 1, 0]} />
       </Canvas>
     </div>
   );

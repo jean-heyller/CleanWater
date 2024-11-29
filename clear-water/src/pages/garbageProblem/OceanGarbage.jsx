@@ -181,6 +181,10 @@ export const OceanGarbage = () => {
     navigate("/recycling");
   };
 
+  const handleButtonSolutionClick = () => {
+    navigate("/solutionGarbage");
+  };
+
   const handle3DButtonClick = () => {
     setCameraPosition(new Vector3(50, 50, -110)); // Change to the desired position
     setControlCamera(true); // Enable camera control
@@ -247,10 +251,16 @@ export const OceanGarbage = () => {
             del problema y las acciones que se están tomando para abordarlo.
           </p>
           <button
-            className="mt-4 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 font-bold"
+            className="mt-5 mr-3 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 font-bold"
             onClick={handleButtonClick}
           >
             Siguiente problema ambiental
+          </button>
+          <button
+            className="mt-5 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 font-bold"
+            onClick={handleButtonSolutionClick}
+          >
+            Solución
           </button>
           <button
             className="ml-4 mt-4 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 font-bold"

@@ -9,8 +9,8 @@ export function Fish3D(props) {
       {...props}
       dispose={null}
       scale={[0.05, 0.05, 0.05]} 
-      position={[-7, 0, 0]} 
-      rotation={[0, Math.PI / 2, 0]} 
+      position={[7, 0, 0]} 
+      rotation={[0, Math.PI / -1.7, 0]} 
     >
       <mesh
         castShadow

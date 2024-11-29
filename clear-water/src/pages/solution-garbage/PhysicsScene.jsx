@@ -5,6 +5,8 @@ import { Physics, useBox, usePlane, useSphere } from "@react-three/cannon";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import robotoFont from "three/examples/fonts/helvetiker_regular.typeface.json";
+import { useLoader } from "@react-three/fiber";
+import { TextureLoader } from "three";
 
 import Solution from "../../component/solution/Solution";
 import backgroundImage from "/img/rio.webp"; // Importa tu imagen
@@ -37,10 +39,12 @@ const Ramp = () => {
 
 const Ball = ({ position }) => {
   const [ref] = useSphere(() => ({ mass: 5, position }));
+  const texture = useLoader(TextureLoader, '/img/textura.jpg'); // Reemplaza con la ruta de tu imagen
+
   return (
     <mesh ref={ref} castShadow>
       <sphereGeometry args={[1, 32, 32]} />
-      <meshStandardMaterial color="blue" />
+      <meshStandardMaterial map={texture} />
     </mesh>
   );
 };
@@ -167,7 +171,7 @@ export const PhysicsScene = () => {
 
   return (
     <div className="relative h-screen w-screen bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImage})` }}>
-       <button
+      <button
         onClick={handleButtonClick}
         className="bg-sky-500 text-white font-bold py-2 px-4 rounded-full shadow-lg transform transition-transform hover:scale-105 active:scale-95"
       >
