@@ -7,6 +7,7 @@ import Recycling from './pages/recycling/Recycling';
 import  Home  from './pages/home/Home.jsx'
 import WaterShortage from './pages/water-shortage/WaterShortage.jsx'
 import { OceanGarbage } from './pages/garbageProblem/OceanGarbage.jsx'
+import { PhysicsScene } from './pages/solution-garbage/PhysicsScene.jsx'
 
 
 createRoot(document.getElementById('root')).render(
@@ -18,6 +19,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/home" element={< Home />} />
         <Route path='/ocean' element={<OceanGarbage />} />
         <Route path="/water-shortage" element={<WaterShortage/>}/>
+        <Route path='/solutionGarbage' element={<PhysicsScene/>}/>
       </Routes>
     </Router>
   </StrictMode>,
