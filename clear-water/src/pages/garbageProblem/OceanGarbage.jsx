@@ -264,12 +264,6 @@ export const OceanGarbage = () => {
           >
             Girar a la Derecha
           </button>
-          <button
-            className="ml-4 mt-4 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 font-bold"
-            onClick={openModal}
-          >
-            Mostrar Instrucciones
-          </button>
         </div>
         <div className="w-1/2 h-full">
           <Canvas shadows camera={{ position: [150, 150, -550], fov: 50 }}>
@@ -286,8 +280,9 @@ export const OceanGarbage = () => {
               shadow-camera-top={10}
               shadow-camera-bottom={-10}
             />
-            <pointLight position={[110, 30, -290]} intensity={0.5} castShadow />{" "}
-            {/* Luz original */}
+            <pointLight position={[110, 30, -290]} intensity={0.5} castShadow /> {/* Luz original */}
+        
+           
             <Text3D
               position={[130, 50, -150]}
               rotation={[0, Math.PI, 0]}
@@ -312,6 +307,12 @@ export const OceanGarbage = () => {
               onPointerOut={handleSoundStop}
               castShadow
               receiveShadow
+            />
+            <OrbitControls
+              enablePan={true}
+              enableZoom={true}
+              enableRotate={true}
+              onStart={() => setControlCamera(false)}
             />
             <mesh
               position={[0, -185, -90]}
@@ -345,6 +346,7 @@ export const OceanGarbage = () => {
               <planeGeometry args={[200, 200]} />
               <shadowMaterial transparent={true} opacity={0.1} />
             </mesh>
+
             <mesh
               position={[0, -8, -0]} // Ajusta la posición según sea necesario
               scale={[2, 2, 2]}
@@ -370,62 +372,18 @@ export const OceanGarbage = () => {
                 }
               </Text>
             </mesh>
+
             <CameraController
               cameraPosition={cameraPosition}
               controlCamera={controlCamera}
             />
-            <OrbitControls
-              enablePan={true}
-              enableZoom={true}
-              enableRotate={true}
-              onStart={() => setControlCamera(false)}
-            />
             <Environment
               background={true}
               files={"/cubemap/ocean/kloppenheim_06_puresky_2k.hdr"}
-              rotation={envRotation}
             />
           </Canvas>
         </div>
       </div>
-
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-lg relative">
-            <button
-              className="absolute top-2 right-2 text-black"
-              onClick={closeModal}
-            >
-              X
-            </button>
-            <h2 className="text-2xl font-bold mb-4">Instrucciones</h2>
-            <p className="mb-4">
-              <img
-                src="/img/arrow-left.png"
-                alt="Left Arrow"
-                className="inline-block w-6 h-6 mr-2"
-              />
-              Presiona la tecla izquierda para girar el océano a la izquierda.
-            </p>
-            <p className="mb-4">
-              <img
-                src="/img/arrow-right.png"
-                alt="Right Arrow"
-                className="inline-block w-6 h-6 mr-2"
-              />
-              Presiona la tecla derecha para girar el océano a la derecha.
-            </p>
-            <p className="mb-4">
-              <img
-                src="/img/espacio.png"
-                alt="Space Bar"
-                className="inline-block w-6 h-6 mr-2"
-              />
-              Presiona la tecla espacio para salir del océano.
-            </p>
-          </div>
-        </div>
-      )}
     </KeyboardControls>
   );
 };
