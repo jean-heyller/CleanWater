@@ -44,6 +44,8 @@ const FunctionButtons = ({state, setState}) => {
   const handleScoreClick = (buttonText) => {
     if (state) {
       navigate("/water-shortage");
+    }else{
+      navigate("/table");
     }
   };
 

@@ -5,6 +5,8 @@ import db from "../../firebase.config";
 class UserDao {
     constructor() {
         this.collectionRef = collection(db, "users");
+        this.rewardsCollectionRef = collection(db, "Recompensas");
+        this.scoresCollectionRef = collection(db, "Puntuaciones");
     }
 
     async getUserById(id) {
@@ -95,6 +97,42 @@ class UserDao {
                 console.error("Error removing document: ", error);
                 return { sucess: false };
             });
+    };
+
+
+    async getAllRewards() {
+        try {
+            const querySnapshot = await getDocs(this.rewardsCollectionRef);
+            const rewards = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            return { success: true, data: rewards };
+        } catch (error) {
+            console.error("Error getting rewards: ", error);
+            return { success: false, data: null };
+        }
+    }
+
+
+    async getAllScores() {
+        try {
+            const querySnapshot = await getDocs(this.scoresCollectionRef);
+            const scores = querySnapshot.docs.map(doc => ({
+                ...doc.data()
+            }));
+            return { success: true, data: scores };
+        }
+
+        catch (error) {
+            console.error("Error getting scores: ", error);
+            return { success: false, data: null };
+        }
+
+        finally {
+            console.log("Finally");
+        }
+
     }
 
 }

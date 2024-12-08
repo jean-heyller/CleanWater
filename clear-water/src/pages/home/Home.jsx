@@ -1,7 +1,10 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/no-unknown-property */
 import { Canvas, useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
 import { Text3D } from "@react-three/drei";
+import { useDispatch } from "react-redux";
+import { setRewards } from "../../redux/UserSlice";
 import Controls from "../../component/controls/Controls";
 
 import { useTypeStore } from "../../stores/store-type-selected";
@@ -11,6 +14,9 @@ import { useState } from "react";
 import Desert from "../water-shortage/models-3D/desert/Desert";
 
 import * as THREE from 'three';
+import UserDao from "../../daos/UserDao";
+
+import { useEffect } from "react";
 
 const TexturedSphere = ({ position, onClick }) => {
   const texture = useLoader(TextureLoader, '/img/textura.jpg');
@@ -26,6 +32,7 @@ const Home = () => {
   const { typeProblem } = useTypeStore();
   const [introState, setIntroState] = useState(false);
   const [hoveredObject, setHoveredObject] = useState(null);
+  const dispatch = useDispatch();
 
   const Background = ({ onClick }) => {
     const texture = useLoader(TextureLoader, '/texture/fondo_marino.jpg');
@@ -42,7 +49,20 @@ const Home = () => {
     setHoveredObject(object);
   };
 
+  useEffect(() => {
+    const fetchRewards = async () => {
+        const result = await UserDao.getAllScores();
+        if (result.success) {
+            dispatch(setRewards(result.data));
+        } else {
+            console.error("Failed to fetch rewards");
+        }
+    };
+
+    fetchRewards();
+}, [dispatch]);
   return (
+
     <div className="bg-[url('/img/ocean.webp')] bg-cover bg-center h-screen">
       <Canvas camera={{ position: [0, 2, 4], fov: 110 }}>
         <ambientLight intensity={0.8} />
