@@ -1,7 +1,7 @@
 import React from "react";
-import arrowRight from "/public/img/arrow-right.png";
-import arrowLeft from "/public/img/arrow-left.png";
-import escKey from "/public/img/esc-key.png";
+import arrowRight from "/img/arrow-right.png";
+import arrowLeft from "/img/arrow-left.png";
+import escKey from "/img/esc-key.png";
 import "./InformationModal.css";
 
 const InformationModal = ({ isModalOpen, handleCloseModal, data }) => {

@@ -18,6 +18,7 @@ import { KeyboardControls } from "@react-three/drei";
 import KeyBoardsFunctions from "./events/KeyboardFunctions";
 import MouseFunctions from "./events/MouseFunctions";
 import ProblemText from "./text/ProblemText";
+import Video from "./videos/Video";
 import { Physics } from "@react-three/rapier";
 import Fish from "./models-3D/animals/Fish";
 import Fishes from "./models-3D/animals/Fishes";
@@ -27,6 +28,7 @@ import Cuboid from "./models-3D/collider/Cuboid";
 
 const WaterShortage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [selectedProblem, setSelectedProblem] = useState(null);
   const { problem } = useProblemStore();
 
@@ -54,7 +56,7 @@ const WaterShortage = () => {
         <MouseFunctions handleSelectedProblem={handleSelectedProblem}>
           <Physics>
             <Title3D position={[2.5, 40, 28]} />
-            <Cuboid position={[2.5, 10, 28]}/>
+            <Cuboid position={[2.5, 11.5, 28]}/>
             <Desert scale={[18, 18, 18]} position={[85, -25, 18]} />
             <Grass scale={[1.8, 1.8, 1.8]} position={[-16.5, -1.3, 11.5]} />
             <Fish
@@ -70,6 +72,14 @@ const WaterShortage = () => {
             />
           </Physics>
           <Staging />
+          <Video 
+            name="screen" 
+            position={[7, 3, -3]} 
+            scale={10} 
+            rotation={[0, Math.PI/-0.82, 0]}
+            setIsVideoOpen={setIsVideoOpen}
+            isVideoOpen={isVideoOpen}
+          />
           <ProblemsButtons
             isModalOpen={isModalOpen}
             handleOpenModal={handleOpenModal}
