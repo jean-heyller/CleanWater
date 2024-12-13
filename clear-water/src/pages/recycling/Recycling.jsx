@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import { Canvas, useLoader, useFrame } from '@react-three/fiber';
 import { useRef, useState, useEffect } from 'react';
 import React from 'react';
@@ -11,6 +12,7 @@ import { Clone } from '@react-three/drei';
 import { Physics, useBox, usePlane } from '@react-three/cannon';
 import { AudioLoader, Audio } from 'three';
 import { EffectComposer, Bloom, Noise } from '@react-three/postprocessing';
+import { useNavigate } from "react-router-dom";
 
 
 const Bubble = ({ moveUp }) => {
@@ -120,6 +122,13 @@ const BackgroundSound = () => {
       sound.play(); 
       audioRef.current = sound;
     });
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.stop();
+        audioRef.current = null;
+      }
+    };
   }, []);
 
   return null;
@@ -340,6 +349,7 @@ const RedirectButton = () => {
 
 const Scene = () => {
   const [moveBubbles, setMoveBubbles] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -358,6 +368,10 @@ const Scene = () => {
   const handleClick = () => {
     setMoveBubbles(true);
   };
+
+  const handleNextProblem = () => {
+    navigate('/water-shortage');
+  }
 
   return (
     <>
@@ -398,6 +412,24 @@ const Scene = () => {
           <Noise opacity={0.2} />
         </EffectComposer>
       </Canvas>
+      <button
+      onClick={handleNextProblem}
+      style={{
+        position: 'absolute',
+        top: '20px',
+        left: '75%',
+        transform: 'translateX(-50%)',
+        padding: '10px 20px',
+        backgroundColor: '#ff2d00',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '16px',
+      }}
+    >
+      Siguiente problema ambiental
+    </button>
       <RedirectButton />
     </>
   );
