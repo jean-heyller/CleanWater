@@ -6,10 +6,13 @@ import { Text3D } from "@react-three/drei";
 import { useDispatch } from "react-redux";
 import { setRewards } from "../../redux/RewardsSlice";
 import Controls from "../../component/controls/Controls";
+import { setQuiz } from "../../redux/QuizSlice";
 
 import { useTypeStore } from "../../stores/store-type-selected";
 import FunctionButtons from "./function-buttons/FunctionButtons";
 import { useState } from "react";
+
+import useAuthStore from "../../stores/use-auth-store";
 
 import Desert from "../water-shortage/models-3D/desert/Desert";
 
@@ -17,6 +20,7 @@ import * as THREE from "three";
 import UserDao from "../../daos/UserDao";
 
 import { useEffect } from "react";
+
 
 const TexturedSphere = ({ position, onClick }) => {
   const texture = useLoader(TextureLoader, "/img/textura.jpg");
@@ -33,6 +37,7 @@ const Home = () => {
   const [introState, setIntroState] = useState(false);
   const [hoveredObject, setHoveredObject] = useState(null);
   const dispatch = useDispatch();
+  const { user } = useAuthStore();
 
   const Background = ({ onClick }) => {
     const texture = useLoader(TextureLoader, "/texture/fondo_marino.jpg");
@@ -56,8 +61,19 @@ const Home = () => {
   useEffect(() => {
     const fetchRewards = async () => {
       const result = await UserDao.getAllScores();
+
+      const resultQuiz = await UserDao.getQuizStateByEmail(user);
+
       if (result.success) {
         dispatch(setRewards(result.data));
+        if (resultQuiz.success) {
+          dispatch(
+            setQuiz({
+              questions: resultQuiz.data.questions,
+              currentQuestion: resultQuiz.data.currentQuestion,
+            })
+          );
+        }
       } else {
         console.error("Failed to fetch rewards");
       }

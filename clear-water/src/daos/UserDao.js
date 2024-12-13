@@ -157,6 +157,21 @@ class UserDao {
         }
     }
 
+    async getScoreByEmail(email) {
+        try {
+            const q = query(this.scoresCollectionRef, where("email", "==", email));
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                return { success: true, data: querySnapshot.docs[0].data() };
+            } else {
+                return { success: false, data: null };
+            }
+        } catch (error) {
+            console.error("Error getting score: ", error);
+            return { success: false, data: null };
+        }
+    }
+
 
 
     async saveQuizState(quizState) {
@@ -179,10 +194,23 @@ class UserDao {
         }
     }
 
+
+    async getQuizStateByEmail(email) {
+        try {
+          const q = query(this.quizzesCollectionRef, where("email", "==", email));
+          const querySnapshot = await getDocs(q);
+          if (!querySnapshot.empty) {
+            return { success: true, data: querySnapshot.docs[0].data() };
+          } else {
+            return { success: false, data: null };
+          }
     
-
-
-   
+        }
+        catch (error) {
+          console.error("Error getting quiz state: ", error);
+          return { success: false, data: null };
+        }
+      }
 
 }
 export default new UserDao();

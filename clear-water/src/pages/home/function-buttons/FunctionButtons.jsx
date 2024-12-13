@@ -59,7 +59,7 @@ const FunctionButtons = ({state, setState}) => {
   }
 
   const handleMyProfileClick = (buttonText) => {
-    navigate("/question1");
+    navigate("/handle");
   }
 
   const handleSoundClick = () => {
@@ -117,7 +117,7 @@ const FunctionButtons = ({state, setState}) => {
        <Button3D
         position={[positionNewButton.x, positionNewButton.y, positionNewButton.z]}
         onClick={handleMyProfileClick}
-        text="Mi perfil"
+        text="Quiz"
       />
       <Box
         ref={boxRef}
