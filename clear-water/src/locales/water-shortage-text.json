@@ -6,16 +6,35 @@
   "PROBLEM_1": {
     "title": "Degradación de la vegetación ribereña",
     "description": "La vegetación que crece en las orillas de los ríos, como árboles, arbustos y plantas herbáceas, depende de la humedad constante para desarrollarse y cumplir funciones ecológicas clave. La falta de agua limita su crecimiento, lo que afecta a los animales que dependen de esta vegetación para refugio, alimentación y sombra. Además, la degradación de la vegetación ribereña debilita el suelo, incrementando el riesgo de erosión y deslizamientos, lo cual puede tener un impacto negativo en la calidad del agua y en la estabilidad del ecosistema en general.",
-    "solution": "Implementar programas de reforestación y conservación de la vegetación ribereña, así como promover prácticas agrícolas sostenibles que reduzcan el uso excesivo de agua y la contaminación."
+    "solution": "Participa en jornadas de reforestación cerca de ríos o cuerpos de agua, planta árboles o arbustos nativos en áreas cercanas y evita tirar basura o contaminantes en las zonas ribereñas."
   },
   "PROBLEM_2": {
     "title": "Impacto en la fauna terrestre cercana",
     "description": "Los animales terrestres que dependen de los ríos, como mamíferos, aves y reptiles, se ven seriamente afectados cuando estos cuerpos de agua se secan o disminuyen su caudal. Estos animales necesitan el agua de los ríos para beber, bañarse y buscar alimento. La falta de recursos hídricos provoca estrés, cambios en sus patrones de movimiento e incluso migraciones forzadas, lo cual reduce sus poblaciones en las áreas afectadas y puede conducir a la competencia y conflictos con otras especies por fuentes alternativas de agua.",
-    "solution": "Crear y proteger reservas naturales que aseguren el acceso al agua para la fauna terrestre, y desarrollar proyectos de restauración de ríos y humedales para mantener los caudales necesarios."
+    "solution": "Coloca bebederos seguros en áreas cercanas a zonas naturales, respeta la vida silvestre evitando alterar sus hábitats y apoya campañas de conservación de fauna local con donaciones o voluntariado."
   },
   "PROBLEM_3": {
     "title": "Pérdida de hábitat acuático",
     "description": "La reducción de caudales en los ríos disminuye considerablemente los espacios habitables para especies acuáticas como peces, anfibios, insectos y crustáceos. Estos animales necesitan condiciones estables de profundidad, temperatura y oxígeno para sus ciclos de vida, y la escasez de agua los deja expuestos a cambios extremos de temperatura y depredadores. La falta de hábitat adecuado también interfiere con sus procesos de alimentación, reproducción y refugio, lo cual pone en riesgo la supervivencia de numerosas especies.",
-    "solution": "Implementar políticas de gestión sostenible del agua que aseguren caudales ecológicos mínimos, y promover la restauración de hábitats acuáticos mediante la eliminación de barreras y la mejora de la calidad del agua."
+    "solution": "Evita consumir productos que generen alta contaminación del agua, reduce el uso de fertilizantes químicos en jardines, y participa en limpiezas de ríos y campañas de restauración de hábitats acuáticos."
+  },
+  "QUESTION_4": {
+    "title": "Muchos ____________ se pueden encontrar en las zonas afectadas por la escasez porque no lograron hidratarse lo suficiente.",
+    "solution": "Restos",
+    "errorMessage": "Incorrecto. Recuerda que la falta de agua puede llevar a la descomposición de organismos vivos en zonas secas.",
+    "correctMessage": "¡Correcto! La escasez de agua deja restos debido a la incapacidad de muchos seres vivos de hidratarse."
+  },
+  "QUESTION_5": {
+    "title": "Sin el ____________ la fauna que vive en el desaparecería.",
+    "solution": "Río",
+    "errorMessage": "No es correcto. Sin los ríos, los ecosistemas acuáticos y terrestres colapsarían.",
+    "correctMessage": "¡Así es! Los ríos son esenciales para la vida de innumerables especies."
+  },
+  "QUESTION_6": {
+    "title": "Si desaparecemos los ____________, el sol secará los ríos y se generarán climas desérticos.",
+    "solution": "Árboles",
+    "errorMessage": "Respuesta incorrecta. Los árboles juegan un papel crucial en proteger ríos y regular el clima.",
+    "correctMessage": "¡Exacto! Los árboles ayudan a preservar ríos y a prevenir climas extremos."
   }
+  
 }
