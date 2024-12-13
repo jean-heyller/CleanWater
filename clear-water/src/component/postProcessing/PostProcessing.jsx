@@ -1,9 +1,10 @@
 import { EffectComposer, Sepia } from "@react-three/postprocessing";
 
-const PostProcessing = () => {
+const PostProcessing = ({ children }) => {
     return (
         <EffectComposer>
-            <Sepia></Sepia>
+            <Sepia />
+            {children}
         </EffectComposer>
     );
 };

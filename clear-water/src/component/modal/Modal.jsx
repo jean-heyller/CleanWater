@@ -20,13 +20,12 @@ const Modal = ({ isCorrect, onClose, preguntaSiguiente }) => {
         isCorrect: isCorrect,
         questionNumber: preguntaSiguiente - 1,
       },
-      currentQuestion: currentQuestion,
+      currentQuestion: preguntaSiguiente - 1,
     };
 
     dispatch(addQuiz(quiz));
   }, [dispatch, isCorrect, preguntaSiguiente]);
 
-  const currentQuestion = 2;
 
   const handleNextQuestion = async () => {
     const quizState = {
@@ -35,7 +34,6 @@ const Modal = ({ isCorrect, onClose, preguntaSiguiente }) => {
       currentQuestion: data.currentQuestion,
     };
     await UserDao.saveQuizState(quizState);
-    console.log("user", user);
     onClose();
     navigate(`/question${preguntaSiguiente}`);
   };
