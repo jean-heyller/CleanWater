@@ -9,6 +9,7 @@ import { usePositionButtonStore } from "../../../stores/store-buttons-position";
 
 const FunctionButtons = ({state, setState}) => {
   const buttonRefs = useRef([]);
+  const positionNewButton = { x: 6, y: 6, z: 0 }; 
   const boxRef = useRef();
 
   const audio = new Audio(sound);
@@ -52,7 +53,13 @@ const FunctionButtons = ({state, setState}) => {
   const handleExitClick = (buttonText) => {
     if (state) {
       navigate("/recycling");
+    }else {
+      navigate("/form")
     }
+  }
+
+  const handleMyProfileClick = (buttonText) => {
+    navigate("/question1");
   }
 
   const handleSoundClick = () => {
@@ -106,6 +113,11 @@ const FunctionButtons = ({state, setState}) => {
         position={[positionSoundButton.x, positionSoundButton.y, positionSoundButton.z]}
         onClick={handleSoundClick}
         text="Introducción"
+      />
+       <Button3D
+        position={[positionNewButton.x, positionNewButton.y, positionNewButton.z]}
+        onClick={handleMyProfileClick}
+        text="Mi perfil"
       />
       <Box
         ref={boxRef}

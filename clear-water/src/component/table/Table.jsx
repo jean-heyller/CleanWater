@@ -1,8 +1,6 @@
-/* eslint-disable react/no-unknown-property */
 import { useSelector } from "react-redux";
 
 const Table = ( ) => {
-  // Obtén las columnas de las claves del primer objeto en data
 
   const data = useSelector((state) => state.rewards);
 

@@ -1,4 +1,4 @@
-import { collection, getDoc, addDoc, deleteDoc, setDoc, query, where,getDocs } from "firebase/firestore";
+import { collection, getDoc, addDoc, deleteDoc, setDoc, query, where, getDocs, doc } from "firebase/firestore";
 import CryptoJS from "crypto-js";
 import db from "../../firebase.config";
 
@@ -6,7 +6,8 @@ class UserDao {
     constructor() {
         this.collectionRef = collection(db, "users");
         this.rewardsCollectionRef = collection(db, "Recompensas");
-        this.scoresCollectionRef = collection(db, "Puntuaciones");
+        this.scoresCollectionRef = collection(db, "scores");
+        this.quizzesCollectionRef = collection(db, "quices");
     }
 
     async getUserById(id) {
@@ -133,7 +134,53 @@ class UserDao {
             console.log("Finally");
         }
 
+    };
+
+
+    async addScore(score) {
+        try {
+            // verifico si el usuario ya tiene una puntuación
+            const q = query(this.scoresCollectionRef, where("email", "==", score.email));
+            const querySnapshot = await getDocs(q);
+            // si ya tiene una puntuación, la actualizo
+            if (!querySnapshot.empty) {
+                const docId = querySnapshot.docs[0].id;
+                await setDoc(doc(this.scoresCollectionRef, docId), score);
+            } else {
+                // si no tiene una puntuación, la agrego
+                await addDoc(this.scoresCollectionRef, score);
+            }
+            return { success: true };
+        } catch (error) {
+            console.error("Error adding score: ", error);
+            return { success: false };
+        }
     }
+
+
+
+    async saveQuizState(quizState) {
+        try {
+            // Verifico si el usuario ya tiene un estado de quiz guardado
+            const q = query(this.quizzesCollectionRef, where("email", "==", quizState.email));
+            const querySnapshot = await getDocs(q);
+            // Si ya tiene un estado de quiz, lo actualizo
+            if (!querySnapshot.empty) {
+                const docId = querySnapshot.docs[0].id;
+                await setDoc(doc(this.quizzesCollectionRef, docId), quizState);
+            } else {
+                // Si no tiene un estado de quiz, lo agrego
+                await addDoc(this.quizzesCollectionRef, quizState);
+            }
+            return { success: true };
+        } catch (error) {
+            console.error("Error saving quiz state: ", error);
+            return { success: false };
+        }
+    }
+
+
+   
 
 }
 export default new UserDao();

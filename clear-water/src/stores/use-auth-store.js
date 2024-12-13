@@ -10,15 +10,18 @@ const useAuthStore = create((set) => ({
   loading: true,
 
   loginGoogleWithPopup: async () => {
+    console.log("Login with Google");
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+
 
       const userExists = await UserDao.checkUserInDB(user.email);
 
       if (!userExists) {
         return false;
       } else {
+        set({ user: user.email, loading: false });
         return true;
       }
     } catch (error) {
@@ -55,6 +58,8 @@ const useAuthStore = create((set) => ({
 
   loginWithForm: async (form) => {
     const { success, data } = await UserDao.checkFormLogin(form);
+
+    console.log("Login with form", success, data);
 
     if (success) {
       set({ user: data, loading: false });
