@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { Text3D } from "@react-three/drei";
 
 import { Physics } from "@react-three/rapier";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -54,33 +55,46 @@ export const Questionq1 = () => {
 
   return (
     <>
-      <div style={{ textAlign: "center", marginBottom: "20px" }}>
-        <h2>¿A qué especie afecta más la contaminación del agua?</h2>
-      </div>
-      <Canvas>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} intensity={1} />
-        <Physics>
-          <group
-            scale={[0.5, 0.5, 0.5]}
-            position={[-0.9, 0, 0]}
-            onClick={(event) => handleModelClick(false, event)}
+      <div
+        className="bg-[url('/img/ocean.webp')] bg-cover bg-center h-screen"
+        style={{ textAlign: "center", marginBottom: "20px" }}
+      >
+        <Canvas>
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[5, 5, 5]} intensity={1} />
+          <Text3D
+            position={[-6.5, 3, 0]}
+            font="/fonts/3d/blue-ocean.json"
+            size={0.50}
+            height={0.2}
+            anchorX="center" // Centra el texto en el eje X
+            anchorY="middle"
           >
-            <Coyote />
-          </group>
-          <group onClick={(event) => handleModelClick(false, event)}>
-            <Human />
-          </group>
-          <FishModels />
-        </Physics>
-      </Canvas>
-      {showModal && (
-        <Modal
-          isCorrect={isCorrect}
-          onClose={() => setShowModal(false)}
-          preguntaSiguiente={preguntaActual + 1}
-        />
-      )}
+            {`                 Seleccione la especie \n que mas le afecta la contaminación del agua`}
+            <meshStandardMaterial attach="material" color="#87CEEB" />
+          </Text3D>
+          <Physics>
+            <group
+              scale={[0.5, 0.5, 0.5]}
+              position={[-0.9, 0, 0]}
+              onClick={(event) => handleModelClick(false, event)}
+            >
+              <Coyote />
+            </group>
+            <group onClick={(event) => handleModelClick(false, event)}>
+              <Human />
+            </group>
+            <FishModels />
+          </Physics>
+        </Canvas>
+        {showModal && (
+          <Modal
+            isCorrect={isCorrect}
+            onClose={() => setShowModal(false)}
+            preguntaSiguiente={preguntaActual + 1}
+          />
+        )}
+      </div>
     </>
   );
 };

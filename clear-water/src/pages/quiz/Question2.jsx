@@ -2,6 +2,7 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { Physics } from "@react-three/cannon";
+import { Text3D } from "@react-three/drei";
 import { useState } from "react";
 import Coral from "../../component/coral/Coral";
 import Plastico from "../../component/plastico/Plastico";
@@ -20,9 +21,6 @@ export const Question2 = () => {
 
   return (
     <>
-      <div style={{ textAlign: "center", marginBottom: "20px" }}>
-        <h2>¿Qué elemento pertenece realmente al mar?</h2>
-      </div>
       <div
         style={{
           height: "100vh",
@@ -31,10 +29,22 @@ export const Question2 = () => {
           justifyContent: "center",
           alignItems: "center",
         }}
+        className="bg-[url('/img/ocean.webp')] bg-cover bg-center h-screen"
       >
         <Canvas camera={{ position: [0, 0, 20] }}>
           <ambientLight intensity={0.9} />
           <directionalLight position={[5, 5, 5]} intensity={1} />
+          <Text3D
+            position={[-18, 10, 0]}
+            font="/fonts/3d/blue-ocean.json"
+            size={2}
+            height={0.2}
+            anchorX="center" // Centra el texto en el eje X
+            anchorY="middle"
+          >
+            {`Seleccione el elemento  \n  que si pertenece al océano`}
+            <meshStandardMaterial attach="material" color="#87CEEB" />
+          </Text3D>
           <Physics>
             <Coral
               scale={50}
@@ -47,8 +57,8 @@ export const Question2 = () => {
               onClick={() => handleModelClick(false)}
             />
             <Ancla
-              scale={3}
-              position={[-5, 0, 10]}
+              scale={8}
+              position={[-5, 0,6]}
               onClick={() => handleModelClick(false)}
             />
           </Physics>
