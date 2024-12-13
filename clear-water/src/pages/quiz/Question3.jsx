@@ -6,20 +6,20 @@ import { useState, useRef } from "react";
 import Carbono from "../../component/carbono/Carbono";
 import Bosque from "../../component/bosque/Bosque";
 import { TextureLoader } from "three";
+import { Text3D } from "@react-three/drei";
 import Ciudad from "../../component/ciudad/ciudad";
 import Modal from "../../component/modal/Modal"; // Importa el nuevo componente Modal
 
 export const Question3 = () => {
   const positions = [
-    [0, 10, 0],
-    [6, 10, 0],
-    [-6, 10, 0],
+    [0, 5, 0],
+    [6, 4, 0],
+    [-6, 3, 0],
   ];
 
   const [targetPosition, setTargetPosition] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const refs = useRef([]);
 
   const handleModelClick = (position, isCorrectAnswer) => {
     setTargetPosition(position);
@@ -76,11 +76,22 @@ export const Question3 = () => {
 
   return (
     <>
-      <div>
+      <div className="bg-[url('/img/ocean.webp')] bg-cover bg-center h-screen">
         <Canvas camera={{ position: [0, 0, 20] }}>
           <ambientLight intensity={1} />
           <pointLight position={[10, 10, 10]} intensity={1} />
           <directionalLight position={[5, 5, 5]} intensity={1} />
+          <Text3D
+            position={[-17, 10, 0]}
+            font="/fonts/3d/blue-ocean.json"
+            size={1}
+            height={0.2}
+            anchorX="center" // Centra el texto en el eje X
+            anchorY="middle"
+          >
+            {`Los CO2 quieren convertirese en el problema ambiental \n de la acidificación de los océanos \n Con que elemento se unen para formar este problema`}
+            <meshStandardMaterial attach="material" color="#87CEEB" />
+          </Text3D>
           {positions.map((position, index) => (
             <MovingCarbono key={index} position={position} index={index} />
           ))}

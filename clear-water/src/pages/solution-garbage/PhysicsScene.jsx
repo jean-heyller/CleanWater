@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-unknown-property */
 import React, { useRef, useState, useEffect } from "react";
 import { Canvas, extend } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
@@ -7,6 +9,7 @@ import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import robotoFont from "three/examples/fonts/helvetiker_regular.typeface.json";
 import { useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
+import { useNavigate } from "react-router-dom";
 
 import Solution from "../../component/solution/Solution";
 import backgroundImage from "/img/rio.webp"; // Importa tu imagen
@@ -100,6 +103,7 @@ const ExplanationText = () => {
 };
 
 export const PhysicsScene = () => {
+  const navigate = useNavigate();
   const [texts, setTexts] = useState([
     { id: 1, position: [2, 2, 0], text: "Contaminacion a los rios" },
     { id: 2, position: [2, 3, 0], text: "Contaminacion a los mares" },
@@ -148,6 +152,10 @@ export const PhysicsScene = () => {
         setTexts((prev) => prev.filter((t) => t.ref !== ref));
       }, 1000);
     }
+  };
+
+  const handleButtonClick1 = () => {
+    navigate("/video");
   };
 
   useEffect(() => {
@@ -229,11 +237,7 @@ export const PhysicsScene = () => {
         shadows
         style={{ height: "100vh", width: "100vw" }}
         rotation={[0, 0, 5]}
-      >
-        <PostProcessing>
-          <VideoMar name="screen" position={[]} scale={8}></VideoMar>
-        </PostProcessing>
-      </Canvas>
+      ></Canvas>
       {showSolution && (
         <div
           style={{
@@ -244,14 +248,33 @@ export const PhysicsScene = () => {
             backgroundColor: "white",
             padding: "20px",
             borderRadius: "10px",
+            textAlign: "center", // Center align text and button
           }}
         >
-          <h2>Solución a la Contaminación del Agua</h2>
-          <p>
+          <h2 className="text-2xl text-sky-500">
+            Solución
+          </h2>
+          <p className="text-sky-400">
             Una solución efectiva para reducir la contaminación del agua es
             implementar sistemas de tratamiento de aguas residuales y promover
             prácticas agrícolas sostenibles.
           </p>
+          <p className="text-sky-400">
+            Además, es fundamental que las industrias adopten prácticas
+            laborales responsables que incluyan el tratamiento adecuado de sus
+            desechos antes de liberarlos al medio ambiente. Los trabajadores y
+            profesionales deben ser capacitados y comprometidos en la
+            implementación de tecnologías limpias y procesos que minimicen el
+            impacto ambiental, fomentando una cultura laboral orientada a la
+            sostenibilidad.
+          </p>
+
+          <button
+            onClick={handleButtonClick1}
+            className="mt-4 px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600"
+          >
+            Continuar
+          </button>
         </div>
       )}
     </div>
