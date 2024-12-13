@@ -8,8 +8,14 @@ const Fishes = (props) => {
   const { actions } = useAnimations(animations, fishGroupRef);
 
   useEffect(() => {
-    actions["Swim"].play();
-    return () => actions["Swim"].stop();
+    if (actions && actions["Swim"]) {
+      actions["Swim"].play();
+    }
+    return () => {
+      if (actions && actions["Swim"]) {
+        actions["Swim"].stop();
+      }
+    };
   }, [actions]);
 
   return (

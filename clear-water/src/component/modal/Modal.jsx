@@ -6,7 +6,7 @@ import { addQuiz } from "../../redux/QuizSlice";
 import UserDao from "../../daos/UserDao";
 import useAuthStore from "../../stores/use-auth-store";
 
-const Modal = ({ isCorrect, onClose, preguntaSiguiente }) => {
+const Modal = ({ isCorrect, onClose, preguntaSiguiente, errorMessage, correctMessage }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useAuthStore();
@@ -52,48 +52,31 @@ const Modal = ({ isCorrect, onClose, preguntaSiguiente }) => {
 
     console.log(score);
     onClose();
-    navigate(`/question${data.currentQuestion + 1}`);
+    navigate(preguntaSiguiente==7 ? "/home" : `/question${data.currentQuestion + 1}`);
     setLoading(false);
   };
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        backgroundColor: "white",
-        padding: "20px",
-        borderRadius: "10px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        textAlign: "center",
-      }}
-    >
-      <h2>{isCorrect ? "¡Correcto!" : "Incorrecto"}</h2>
-      <div style={{ fontSize: "50px", color: isCorrect ? "green" : "red" }}>
-        {isCorrect ? "✔️" : "❌"}
-      </div>
-      {loading ? (
-        <div className="flex justify-center items-center">
-          <ClipLoader size={30} color={"#123abc"} loading={loading} />
-        </div>
-      ) : (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-lg max-h-full overflow-y-auto">
+        {isCorrect ? (
+          <>
+            <span className="text-green-500 text-4xl">✔️</span>
+            <p className="text-green-500 text-xl">{correctMessage}</p>
+          </>
+        ) : (
+          <>
+            <span className="text-red-500 text-4xl">❌</span>
+            <p className="text-red-500 text-xl">{errorMessage}</p>
+          </>
+        )}
         <button
           onClick={handleNextQuestion}
-          style={{
-            marginTop: "20px",
-            padding: "10px 20px",
-            backgroundColor: isCorrect ? "green" : "red",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
+          className="mt-4 p-2 bg-blue-500 text-white rounded"
         >
-          Siguiente pregunta
+          {preguntaSiguiente==7 ? "Ir al home" :"Siguiente Pregunta"}
         </button>
-      )}
+      </div>
     </div>
   );
 };

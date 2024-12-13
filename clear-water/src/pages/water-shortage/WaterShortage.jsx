@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import Desert from "./models-3D/desert/Desert";
 import "./WaterShortage.css";
 import Staging from "./staging/Staging";
@@ -14,7 +14,7 @@ import {
   PROBLEM_2,
   PROBLEM_3,
 } from "../../locales/water-shortage-text.json";
-import { KeyboardControls } from "@react-three/drei";
+import { KeyboardControls, Loader } from "@react-three/drei";
 import KeyBoardsFunctions from "./events/KeyboardFunctions";
 import MouseFunctions from "./events/MouseFunctions";
 import ProblemText from "./text/ProblemText";
@@ -25,6 +25,7 @@ import Fishes from "./models-3D/animals/Fishes";
 import Coyote from "./models-3D/animals/Coyote";
 import Grass from "./models-3D/plants/Grass";
 import Cuboid from "./models-3D/collider/Cuboid";
+import NavigateButtons from "./navigate-buttons/NavigateButtons";
 
 const WaterShortage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,40 +55,48 @@ const WaterShortage = () => {
         ]}
       >
         <MouseFunctions handleSelectedProblem={handleSelectedProblem}>
-          <Physics>
-            <Title3D position={[2.5, 40, 28]} />
-            <Cuboid position={[2.5, 11.5, 28]}/>
-            <Desert scale={[18, 18, 18]} position={[85, -25, 18]} />
-            <Grass scale={[1.8, 1.8, 1.8]} position={[-16.5, -1.3, 11.5]} />
-            <Fish
-              scale={[0.2, 0.2, 0.2]}
-              position={[2.5, -7.0, 12]}
-              rotation={[0, Math.PI / 0.55, 0]}
+          <Suspense fallback={null}>
+            <Physics>
+              <Title3D position={[2.5, 40, 28]} />
+              <Cuboid position={[2.5, 11.5, 28]} />
+              <Desert scale={[18, 18, 18]} position={[85, -25, 18]} />
+              <Grass scale={[1.8, 1.8, 1.8]} position={[-16.5, -1.3, 11.5]} />
+              <Fish
+                scale={[0.2, 0.2, 0.2]}
+                position={[2.5, -7.0, 12]}
+                rotation={[0, Math.PI / 0.55, 0]}
+              />
+              <Fishes scale={[0.7, 0.7, 0.7]} position={[7, -7.0, 1]} />
+              <Coyote
+                scale={[1, 1, 1]}
+                position={[-16, -4.5, -18]}
+                rotation={[0, Math.PI / -0.8, 0]}
+              />
+            </Physics>
+            <Staging />
+            <Video
+              name="screen"
+              position={[7, 3, -3]}
+              scale={10}
+              rotation={[0, Math.PI / -0.82, 0]}
+              setIsVideoOpen={setIsVideoOpen}
+              isVideoOpen={isVideoOpen}
             />
-            <Fishes scale={[0.7, 0.7, 0.7]} position={[7, -7.0, 1]} />
-            <Coyote
-              scale={[1, 1, 1]}
-              position={[-16, -4.5, -18]}
-              rotation={[0, Math.PI / -0.8, 0]}
+            <ProblemsButtons
+              isModalOpen={isModalOpen}
+              handleOpenModal={handleOpenModal}
+              handleSelectedProblem={handleSelectedProblem}
             />
-          </Physics>
-          <Staging />
-          <Video 
-            name="screen" 
-            position={[7, 3, -3]} 
-            scale={10} 
-            rotation={[0, Math.PI/-0.82, 0]}
-            setIsVideoOpen={setIsVideoOpen}
-            isVideoOpen={isVideoOpen}
-          />
-          <ProblemsButtons
-            isModalOpen={isModalOpen}
-            handleOpenModal={handleOpenModal}
-            handleSelectedProblem={handleSelectedProblem}
-          />
-          <Controls element={problem} target={[-14, -1, 20]} />
-          <KeyBoardsFunctions handleSelectedProblem={handleSelectedProblem} />
+            <NavigateButtons
+              position={[8, 3.5, -5]}
+              scale={10}
+              rotation={[0, Math.PI / -0.812, 0]}
+            />
+            <Controls element={problem} target={[-14, -1, 20]} />
+            <KeyBoardsFunctions handleSelectedProblem={handleSelectedProblem} />
+          </Suspense>
         </MouseFunctions>
+        <Loader />
       </KeyboardControls>
       <InformationModal
         isModalOpen={isModalOpen}
