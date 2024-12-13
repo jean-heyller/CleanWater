@@ -33,7 +33,7 @@ const Table = ( ) => {
             {data.map((reward)=> (
                 <tr key={reward.id}>
                     <td className="py-1 text-center p-4">{reward.email}</td>
-                    <td className="py-1 text-center p-4">{reward.Puntuacion}</td>
+                    <td className="py-1 text-center p-4">{reward.puntuacion}</td>
                 </tr>
             ))}
         </tbody>

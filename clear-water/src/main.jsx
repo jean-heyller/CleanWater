@@ -18,6 +18,8 @@ import Question3 from "./pages/quiz/Question3.jsx";
 import Question4 from "./pages/quiz/Question4.jsx";
 import Question5 from "./pages/quiz/Question5.jsx";
 import Question6 from "./pages/quiz/Question6.jsx";
+import Video from "./component/video/Video.jsx";
+import Handle from "./component/handle/Handle.jsx";
 
 
 createRoot(document.getElementById("root")).render(
@@ -33,12 +35,14 @@ createRoot(document.getElementById("root")).render(
           <Route path="/solutionGarbage" element={<PhysicsScene />} />
           <Route path="/table" element={<Table/>} />
           <Route path="/form" element={<Form></Form>}></Route>
+          <Route path="/handle" element={<Handle></Handle>} />
           <Route path="/question1" element={<Questionq1></Questionq1>} />
           <Route path="/question2" element={<Question2></Question2>} />
           <Route path="/question3" element={<Question3></Question3>} />
           <Route path="/question4" element={<Question4></Question4>} />
           <Route path="/question5" element={<Question5></Question5>} />
           <Route path="/question6" element={<Question6></Question6>} />
+          <Route path="/video" element={<Video />} />
         </Routes>
       </Router>
     </Provider>
