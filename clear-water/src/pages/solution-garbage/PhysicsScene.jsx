@@ -13,8 +13,6 @@ import { useNavigate } from "react-router-dom";
 
 import Solution from "../../component/solution/Solution";
 import backgroundImage from "/img/rio.webp"; // Importa tu imagen
-import VideoMar from "../../component/videoMar/VideoMar";
-import PostProcessing from "../../component/postProcessing/PostProcessing";
 
 extend({ TextGeometry });
 

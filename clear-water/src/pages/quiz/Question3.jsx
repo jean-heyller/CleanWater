@@ -106,6 +106,8 @@ export const Question3 = () => {
           isCorrect={isCorrect}
           onClose={() => setShowModal(false)}
           preguntaSiguiente={4}
+          errorMessage={"Respuesta incorrecta"}
+          correctMessage={"Respuesta correcta"}
         />
       )}
     </>

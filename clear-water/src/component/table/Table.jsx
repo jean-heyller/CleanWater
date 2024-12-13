@@ -1,8 +1,10 @@
 import { useSelector } from "react-redux";
 
-const Table = ( ) => {
-
+const Table = () => {
   const data = useSelector((state) => state.rewards);
+
+  // Ordenar el array de mayor a menor puntuación
+  const sortedData = [...data].sort((a, b) => b.puntuacion - a.puntuacion);
 
   return (
     <div className="relative overflow-hidden shadow-md rounded-lg">
@@ -12,30 +14,22 @@ const Table = ( ) => {
           style={{ backgroundColor: "#6c92de", color: "#e5e7eb" }}
         >
           <tr>
-            <th
-              className="py-1 text-center font-bold p-4"
-              contentEditable="true"
-            >
-              Nombre
-            </th>
-            <th
-              className="py-1 text-center font-bold p-4"
-              contentEditable="true"
-            >
-              Puntos
-            </th>
+            <th className="py-1 text-center font-bold p-4">Posición</th>
+            <th className="py-1 text-center font-bold p-4">Email</th>
+            <th className="py-1 text-center font-bold p-4">Puntos</th>
           </tr>
         </thead>
         <tbody
           className="bg-white text-gray-500"
           style={{ backgroundColor: "#FFFFFF", color: "#6b7280" }}
         >
-            {data.map((reward)=> (
-                <tr key={reward.id}>
-                    <td className="py-1 text-center p-4">{reward.email}</td>
-                    <td className="py-1 text-center p-4">{reward.puntuacion}</td>
-                </tr>
-            ))}
+          {sortedData.map((reward, index) => (
+            <tr key={reward.id}>
+              <td className="py-1 text-center p-4">{index + 1}</td>
+              <td className="py-1 text-center p-4">{reward.email}</td>
+              <td className="py-1 text-center p-4">{reward.puntuacion}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
@@ -43,5 +37,3 @@ const Table = ( ) => {
 };
 
 export default Table;
-
-// Ejemplo de uso:
