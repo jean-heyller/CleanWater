@@ -10,6 +10,8 @@ import { TextureLoader } from "three";
 
 import Solution from "../../component/solution/Solution";
 import backgroundImage from "/img/rio.webp"; // Importa tu imagen
+import VideoMar from "../../component/videoMar/VideoMar";
+import PostProcessing from "../../component/postProcessing/PostProcessing";
 
 extend({ TextGeometry });
 
@@ -39,7 +41,7 @@ const Ramp = () => {
 
 const Ball = ({ position }) => {
   const [ref] = useSphere(() => ({ mass: 5, position }));
-  const texture = useLoader(TextureLoader, '/img/textura.jpg'); // Reemplaza con la ruta de tu imagen
+  const texture = useLoader(TextureLoader, "/img/textura.jpg"); // Reemplaza con la ruta de tu imagen
 
   return (
     <mesh ref={ref} castShadow>
@@ -86,7 +88,12 @@ const ExplanationText = () => {
   const font = new FontLoader().parse(robotoFont);
   return (
     <mesh position={[-10, 30, 5]} receiveShadow>
-      <textGeometry args={["CAUSAS \n Los rios funcionan como autopista naturales \n que transportan el agua hacia el mar. \n La basura, al ser arrojada a un rio o sus afluentes,\n es arrastrada por las corrientes fluviales", { font, size: 3, height: 1 }]} />
+      <textGeometry
+        args={[
+          "CAUSAS \n Los rios funcionan como autopista naturales \n que transportan el agua hacia el mar. \n La basura, al ser arrojada a un rio o sus afluentes,\n es arrastrada por las corrientes fluviales",
+          { font, size: 3, height: 1 },
+        ]}
+      />
       <meshStandardMaterial color="skyblue" />
     </mesh>
   );
@@ -145,39 +152,50 @@ export const PhysicsScene = () => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.code === 'Space') {
-        console.log('Space key pressed');
+      if (event.code === "Space") {
+        console.log("Space key pressed");
         if (cameraRef.current) {
-          console.log('Camera Position:', cameraRef.current.position);
-          console.log('Camera Rotation:', cameraRef.current.rotation);
+          console.log("Camera Position:", cameraRef.current.position);
+          console.log("Camera Rotation:", cameraRef.current.rotation);
         } else {
-          console.log('Camera reference is null');
+          console.log("Camera reference is null");
         }
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
   useEffect(() => {
     if (cameraRef.current) {
-      cameraRef.current.rotation.set(57.28378400539587, 34.60628399680841, 0.02723815537228125);
+      cameraRef.current.rotation.set(
+        57.28378400539587,
+        34.60628399680841,
+        0.02723815537228125
+      );
     }
   }, []);
 
   return (
-    <div className="relative h-screen w-screen bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImage})` }}>
+    <div
+      className="relative h-screen w-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
       <button
         onClick={handleButtonClick}
         className="bg-sky-500 text-white font-bold py-2 px-4 rounded-full shadow-lg transform transition-transform hover:scale-105 active:scale-95"
       >
         Solucion
       </button>
-      <Canvas shadows style={{ height: "100vh", width: "100vw" }} rotation={[0, 0, 5]}>
+      <Canvas
+        shadows
+        style={{ height: "100vh", width: "100vw" }}
+        rotation={[0, 0, 5]}
+      >
         <Solution position={[-40, 20, 5]}></Solution>
         {showExplanation && <ExplanationText />}
         <ambientLight intensity={0.5} />
@@ -195,7 +213,11 @@ export const PhysicsScene = () => {
               <TextRamp />
               {ballPosition && <Ball position={ballPosition} />}
               {texts.map((t) => (
-                <Text key={t.id} position={t.position} onCollide={handleCollide}>
+                <Text
+                  key={t.id}
+                  position={t.position}
+                  onCollide={handleCollide}
+                >
                   {t.text}
                 </Text>
               ))}
@@ -203,10 +225,33 @@ export const PhysicsScene = () => {
           )}
         </Physics>
       </Canvas>
+      <Canvas
+        shadows
+        style={{ height: "100vh", width: "100vw" }}
+        rotation={[0, 0, 5]}
+      >
+        <PostProcessing>
+          <VideoMar name="screen" position={[]} scale={8}></VideoMar>
+        </PostProcessing>
+      </Canvas>
       {showSolution && (
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}>
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "white",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
           <h2>Solución a la Contaminación del Agua</h2>
-          <p>Una solución efectiva para reducir la contaminación del agua es implementar sistemas de tratamiento de aguas residuales y promover prácticas agrícolas sostenibles.</p>
+          <p>
+            Una solución efectiva para reducir la contaminación del agua es
+            implementar sistemas de tratamiento de aguas residuales y promover
+            prácticas agrícolas sostenibles.
+          </p>
         </div>
       )}
     </div>
