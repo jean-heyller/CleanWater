@@ -55,7 +55,7 @@ const RegisterForm = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      const registerError = await registerWithForm(formData)
+      const registerError = (await registerWithForm(formData))
         ? null
         : "El correo electrónico ya está registrado";
       if (registerError)
