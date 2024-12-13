@@ -9,6 +9,9 @@ import { Html } from '@react-three/drei';
 import { AnimationMixer } from 'three';
 import { Clone } from '@react-three/drei';
 import { Physics, useBox, usePlane } from '@react-three/cannon';
+import { AudioLoader, Audio } from 'three';
+import { EffectComposer, Bloom, Noise } from '@react-three/postprocessing';
+
 
 const Bubble = ({ moveUp }) => {
   const bubbleRef = useRef();
@@ -103,6 +106,24 @@ const CameraController = () => {
   );
 };
 
+const BackgroundSound = () => {
+  const audioRef = useRef();
+
+  useEffect(() => {
+    const audioLoader = new AudioLoader();
+    audioLoader.load('/audio/mar.mp3', (buffer) => {
+      const listener = new THREE.AudioListener();
+      const sound = new Audio(listener);
+      sound.setBuffer(buffer);
+      sound.setLoop(true); 
+      sound.setVolume(0.5); 
+      sound.play(); 
+      audioRef.current = sound;
+    });
+  }, []);
+
+  return null;
+};
 
 
 const RockModel = () => {
@@ -357,6 +378,7 @@ const Scene = () => {
           shadow-mapSize-height={1024} 
         />
         <Background />
+        <BackgroundSound />
         <Physics>
         <Floor />
         <RockModel />
@@ -371,6 +393,10 @@ const Scene = () => {
           <Bubble key={index} moveUp={moveBubbles} />
         ))}
         <CameraController />
+        <EffectComposer>
+          <Bloom intensity={1.0} threshold={0.5} /> 
+          <Noise opacity={0.2} />
+        </EffectComposer>
       </Canvas>
       <RedirectButton />
     </>
