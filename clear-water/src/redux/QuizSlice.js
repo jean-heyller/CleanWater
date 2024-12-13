@@ -18,10 +18,15 @@ export const quizSlice = createSlice({
                 state.questions.push(action.payload.question);
                 state.currentQuestion = action.payload.currentQuestion;
             }
-        }
+        },
+
+        setQuiz: (state, action) => {
+            state.questions = action.payload.questions;
+            state.currentQuestion = action.payload.currentQuestion;
+        },
     },
 });
 
-export const { addQuiz } = quizSlice.actions;
+export const { addQuiz,setQuiz } = quizSlice.actions;
 
 export default quizSlice.reducer;

@@ -1,18 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { ClipLoader } from "react-spinners";
 import { addQuiz } from "../../redux/QuizSlice";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import UserDao from "../../daos/UserDao";
-import { useSelector } from "react-redux";
 import useAuthStore from "../../stores/use-auth-store";
 
 const Modal = ({ isCorrect, onClose, preguntaSiguiente }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useAuthStore();
-
   const data = useSelector((state) => state.quiz);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const quiz = {
@@ -26,16 +25,35 @@ const Modal = ({ isCorrect, onClose, preguntaSiguiente }) => {
     dispatch(addQuiz(quiz));
   }, [dispatch, isCorrect, preguntaSiguiente]);
 
-
   const handleNextQuestion = async () => {
+    setLoading(true);
     const quizState = {
       email: user,
       questions: data.questions,
       currentQuestion: data.currentQuestion,
     };
     await UserDao.saveQuizState(quizState);
+
+    const score = await UserDao.getScoreByEmail(user);
+
+    if (score.success) {
+      if (isCorrect) {
+        const newScore = score.data.puntuacion + 10;
+        const newScoreData = {
+          puntuacion: newScore,
+          email: user,
+        };
+        await UserDao.addScore(newScoreData);
+      }
+    } else {
+      const points = isCorrect ? 10 : 0;
+      await UserDao.addScore({ email: user, puntuacion: points });
+    }
+
+    console.log(score);
     onClose();
-    navigate(`/question${preguntaSiguiente}`);
+    navigate(`/question${data.currentQuestion + 1}`);
+    setLoading(false);
   };
 
   return (
@@ -56,20 +74,26 @@ const Modal = ({ isCorrect, onClose, preguntaSiguiente }) => {
       <div style={{ fontSize: "50px", color: isCorrect ? "green" : "red" }}>
         {isCorrect ? "✔️" : "❌"}
       </div>
-      <button
-        onClick={handleNextQuestion}
-        style={{
-          marginTop: "20px",
-          padding: "10px 20px",
-          backgroundColor: isCorrect ? "green" : "red",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        Siguiente pregunta
-      </button>
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <ClipLoader size={30} color={"#123abc"} loading={loading} />
+        </div>
+      ) : (
+        <button
+          onClick={handleNextQuestion}
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            backgroundColor: isCorrect ? "green" : "red",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Siguiente pregunta
+        </button>
+      )}
     </div>
   );
 };
