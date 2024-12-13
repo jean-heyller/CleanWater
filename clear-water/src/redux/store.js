@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import rewardsReducer from "./userSlice";
+import { rewardsReducer } from "./RewardsSlice";
 import { quizSlice } from "./QuizSlice";
 
 export const store = configureStore({
     reducer: {
-        rewards: rewardsReducer,
+        rewards: rewardsReducer.reducer,
         quiz: quizSlice.reducer, // Add this line
     },
 });
